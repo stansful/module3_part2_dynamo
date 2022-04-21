@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "113c6011-1a2c-49bb-8753-34294798e069",
+		"name": "module3_part1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get pictures",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzZXJnZWV2QGZsby50ZWFtIiwiaWF0IjoxNjUwMjg3NTA3fQ.PG_Thq4Mdx5ri0jW-t9oHEYwR2zdLRk2TrHbi5jzk20",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{local3}}gallery",
+					"host": [
+						"{{local3}}gallery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get pictures query",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzZXJnZWV2QGZsby50ZWFtIiwiaWF0IjoxNjUwMjg3NTA3fQ.PG_Thq4Mdx5ri0jW-t9oHEYwR2zdLRk2TrHbi5jzk20",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{local3}}gallery?page=1&limit=2&filter=true",
+					"host": [
+						"{{local3}}gallery"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "filter",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload picture",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzZXJnZWV2QGZsby50ZWFtIiwiaWF0IjoxNjUwMjg3NTA3fQ.PG_Thq4Mdx5ri0jW-t9oHEYwR2zdLRk2TrHbi5jzk20",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "picture",
+							"type": "file",
+							"src": "/Users/philipp/Downloads/picture-of-year.jpeg"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local3}}gallery",
+					"host": [
+						"{{local3}}gallery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth signIn",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"asergeev@flo.team\",\n    \"password\":\"jgF5tn4F\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local3}}auth/signIn",
+					"host": [
+						"{{local3}}auth"
+					],
+					"path": [
+						"signIn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth signUp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"testemail1@gmail.com\",\n    \"password\":\"123456789\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local3}}auth/signUp",
+					"host": [
+						"{{local3}}auth"
+					],
+					"path": [
+						"signUp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload dev users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local3}}auth/fill",
+					"host": [
+						"{{local3}}auth"
+					],
+					"path": [
+						"fill"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "parse and upload images",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local3}}gallery/fill",
+					"host": [
+						"{{local3}}gallery"
+					],
+					"path": [
+						"fill"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
