@@ -66,7 +66,6 @@
     "@redtea/serverless-env-generator": "2.1.0",
     "@serverless/typescript": "2.68.0",
     "@types/aws-lambda": "8.10.88",
-    "@types/bcrypt": "5.0.0",
     "@types/bluebird": "^3.5.36",
     "@types/jest": "27.0.3",
     "@types/node": "^14.18.5",
@@ -99,11 +98,12 @@
     "typescript": "4.5.4"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.76.0",
+    "@aws-sdk/lib-dynamodb": "3.76.0",
     "@floteam/errors": "^1.0.8",
     "@redtea/format-axios-error": "^2.0.2",
     "aws-sdk": "^2.1048.0",
     "axios": "^0.24.0",
-    "bcrypt": "5.0.1",
     "dotenv": "16.0.0",
     "dynamoose": "^2.8.3",
     "lambda-multipart-parser": "1.0.1",

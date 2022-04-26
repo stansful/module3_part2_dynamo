@@ -5,7 +5,7 @@ import { restApiCorsConfig } from './config/serverless/parts/rest-api-cors';
 import { joinParts } from './config/serverless/utils';
 
 const CLIENT = '${file(./env.yml):${self:provider.stage}.CLIENT}';
-const SERVICE_NAME = `template-sls`;
+const SERVICE_NAME = `sls-part-3-2-stansful`;
 const STAGE = '${opt:stage, "dev"}';
 const REGION = '${file(./env.yml):${self:provider.stage}.REGION}';
 const PROFILE = '${file(./env.yml):${self:provider.stage}.PROFILE}';
@@ -62,7 +62,7 @@ const masterConfig: AWS = {
     envFiles: ['env.yml'],
     envEncryptionKeyId: {
       local: '${file(./kms_key.yml):local}',
-      // dev: '${file(./kms_key.yml):dev}',
+      dev: '${file(./kms_key.yml):dev}',
       // test: '${file(./kms_key.yml):test}',
       // prod: '${file(./kms_key.yml):prod}',
     },
@@ -73,7 +73,7 @@ const masterConfig: AWS = {
   plugins: [
     '@redtea/serverless-env-generator',
     'serverless-esbuild',
-    'serverless-offline-sqs',
+    // 'serverless-offline-sqs',
     'serverless-offline',
     'serverless-prune-plugin',
   ],
