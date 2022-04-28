@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 import { authConfig } from './config/serverless/parts/auth';
 import { galleryConfig } from './config/serverless/parts/gallery';
 import { restApiCorsConfig } from './config/serverless/parts/rest-api-cors';
+import { usersTableConfig } from './config/serverless/tables/users.table';
 import { joinParts } from './config/serverless/utils';
 
 const CLIENT = '${file(./env.yml):${self:provider.stage}.CLIENT}';
@@ -79,4 +80,4 @@ const masterConfig: AWS = {
   ],
 };
 
-module.exports = joinParts(masterConfig, [restApiCorsConfig, authConfig, galleryConfig]);
+module.exports = joinParts(masterConfig, [restApiCorsConfig, authConfig, galleryConfig, usersTableConfig]);

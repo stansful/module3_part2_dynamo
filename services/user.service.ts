@@ -1,21 +1,39 @@
 import { AlreadyExistsError, HttpInternalServerError } from '@floteam/errors';
 import { RuntimeError } from '@floteam/errors/runtime/runtime-error';
-import { User, userModel } from '@models/MongoDB';
+import { getEnv } from '@helper/environment';
+import { DynamoDBService } from '@services/dynamoDB.service';
 import { HashingService } from '@services/hashing.service';
 import { DoesNotExistError } from '../errors/does-not-exist';
 
-export class UserService {
-  public async getByEmail(email: string): Promise<User> {
-    const user = await userModel.findOne({ email });
+interface DynamoUserProfile {
+  primaryKey: string;
+  sortKey: string;
+  email: string;
+  password: string;
+  createdAt: string;
+}
 
-    if (!user) {
+export class UserService {
+  private readonly dynamoDBService: DynamoDBService;
+  private readonly hashingService: HashingService;
+  private readonly usersTableName = getEnv('USERS_TABLE_NAME');
+
+  constructor() {
+    this.dynamoDBService = new DynamoDBService();
+    this.hashingService = new HashingService();
+  }
+
+  public async getByEmail(email: string) {
+    const user = await this.dynamoDBService.get(this.usersTableName, `USER#${email}`, `PROFILE#${email}`);
+
+    if (!user?.Item?.email) {
       throw new DoesNotExistError('User does not exist');
     }
 
-    return user;
+    return user.Item as DynamoUserProfile;
   }
 
-  public async create(candidate: Omit<User, '_id'>): Promise<User> {
+  public async create(candidate: Pick<DynamoUserProfile, 'email' | 'password'>) {
     try {
       await this.getByEmail(candidate.email);
     } catch (error) {
@@ -23,11 +41,13 @@ export class UserService {
         throw new HttpInternalServerError('User creating failed');
       }
 
-      const hashingService = new HashingService();
-      const encryptedPassword = await hashingService.encrypt(candidate.password);
+      const encryptedPassword = await this.hashingService.encrypt(candidate.password);
 
-      const user = await userModel.create({ ...candidate, password: encryptedPassword });
-      return user.save();
+      return this.dynamoDBService.put(this.usersTableName, `USER#${candidate.email}`, `PROFILE#${candidate.email}`, {
+        email: candidate.email,
+        password: encryptedPassword,
+        createdAt: new Date().toLocaleDateString(),
+      });
     }
     throw new AlreadyExistsError('User already exist');
   }
