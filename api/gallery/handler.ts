@@ -1,14 +1,16 @@
 import { errorHandler } from '@helper/http-api/error-handler';
 import { createResponse } from '@helper/http-api/response';
 import { log } from '@helper/logger';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
+import { APIGatewayProxyHandlerV2, APIGatewayProxyWithLambdaAuthorizerHandler } from 'aws-lambda';
 import { RequestGalleryQueryParams } from './gallery.interfaces';
 import { GalleryManager } from './gallery.manager';
 import multipartParser from 'lambda-multipart-parser';
 
 const galleryManager = new GalleryManager();
 
-export const getPictures: APIGatewayProxyHandlerV2 = async (event, context) => {
+export const getPictures: APIGatewayProxyWithLambdaAuthorizerHandler<{
+  lambda: { email: string };
+}> = async (event, context) => {
   log(event);
 
   try {
@@ -20,7 +22,8 @@ export const getPictures: APIGatewayProxyHandlerV2 = async (event, context) => {
       filter: event.queryStringParameters?.filter,
     };
     // @ts-ignore
-    const email = event.requestContext.authorizer.email;
+    const email = event.requestContext.authorizer.lambda.email;
+
     const pictures = await galleryManager.getPictures(query, email);
 
     return createResponse(200, pictures);
@@ -35,7 +38,7 @@ export const uploadPicture: APIGatewayProxyHandlerV2 = async (event, context) =>
     context.callbackWaitsForEmptyEventLoop = false;
 
     // @ts-ignore
-    const email = event.requestContext.authorizer.email;
+    const email = event.requestContext.authorizer.lambda.email;
     // @ts-ignore
     const pictures = await multipartParser.parse(event);
 

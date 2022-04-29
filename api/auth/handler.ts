@@ -1,8 +1,8 @@
 import {
-  APIGatewayAuthorizerResult,
-  APIGatewayProxyHandlerV2,
-  APIGatewayTokenAuthorizerWithContextHandler,
-} from 'aws-lambda';
+  APIGatewayAuthorizerSimpleResult,
+  APIGatewayRequestAuthorizerHttpApiPayloadV2Event,
+} from '@interfaces/api-gateway-authorizer.interface';
+import { APIGatewayProxyHandlerV2, Handler } from 'aws-lambda';
 import { errorHandler } from '@helper/http-api/error-handler';
 import { createResponse } from '@helper/http-api/response';
 import { log } from '@helper/logger';
@@ -52,10 +52,10 @@ export const uploadDevUsers: APIGatewayProxyHandlerV2 = async (event, context) =
   }
 };
 
-export const authenticate: APIGatewayTokenAuthorizerWithContextHandler<Record<string, any>> = async (
-  event,
-  context
-) => {
+export const authenticate: Handler<
+  APIGatewayRequestAuthorizerHttpApiPayloadV2Event,
+  APIGatewayAuthorizerSimpleResult
+> = async (event, context) => {
   log(event);
 
   try {
@@ -63,32 +63,15 @@ export const authenticate: APIGatewayTokenAuthorizerWithContextHandler<Record<st
 
     const candidate = await authManager.authenticate(event.authorizationToken);
 
-    return generatePolicy('user', 'Allow', '*', { email: candidate.email });
+    return {
+      isAuthorized: true,
+      context: {
+        email: candidate.email,
+      },
+    };
   } catch (error) {
-    return generatePolicy('user', 'Deny', '*', {});
+    return {
+      isAuthorized: false,
+    };
   }
 };
-
-export function generatePolicy<C extends APIGatewayAuthorizerResult['context']>(
-  principalId: string,
-  effect: 'Allow' | 'Deny',
-  resource: string,
-  context: C
-): APIGatewayAuthorizerResult & { context: C } {
-  const authResponse: APIGatewayAuthorizerResult & { context: C } = {
-    principalId,
-    policyDocument: {
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: effect,
-          Resource: resource,
-        },
-      ],
-    },
-    context,
-  };
-
-  return authResponse;
-}

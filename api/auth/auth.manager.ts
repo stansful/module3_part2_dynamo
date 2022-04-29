@@ -26,7 +26,6 @@ export class AuthManager {
     if (!token) {
       throw new HttpUnauthorizedError('Please, provide token');
     }
-
     return this.authService.authenticate(token);
   }
 }

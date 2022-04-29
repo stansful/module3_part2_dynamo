@@ -40,6 +40,7 @@ export interface APIGatewayRequestAuthorizerHttpApiPayloadV2Event {
   cookies?: string[];
   path: string;
   httpMethod: string;
+  authorizationToken?: string;
   headers: APIGatewayRequestAuthorizerEventHeaders | null;
   pathParameters: APIGatewayRequestAuthorizerEventPathParameters | null;
   queryStringParameters: APIGatewayRequestAuthorizerEventQueryStringParameters | null;

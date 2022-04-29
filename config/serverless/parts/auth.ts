@@ -1,6 +1,19 @@
 import { AWSPartitial } from '../types';
 
 export const authConfig: AWSPartitial = {
+  provider: {
+    httpApi: {
+      authorizers: {
+        jwtSimpleAuthorizerHttpApi: {
+          type: 'request',
+          enableSimpleResponses: true,
+          functionName: 'jwtAuthorizerHttpApi',
+          identitySource: '$request.header.Authorization',
+        },
+      },
+    },
+  },
+
   functions: {
     jwtAuthorizerHttpApi: {
       handler: 'api/auth/handler.authenticate',
@@ -12,7 +25,7 @@ export const authConfig: AWSPartitial = {
       memorySize: 128,
       events: [
         {
-          http: {
+          httpApi: {
             path: '/auth/signIn',
             method: 'post',
           },
@@ -25,7 +38,7 @@ export const authConfig: AWSPartitial = {
       memorySize: 128,
       events: [
         {
-          http: {
+          httpApi: {
             path: '/auth/signUp',
             method: 'post',
           },
@@ -38,7 +51,7 @@ export const authConfig: AWSPartitial = {
       memorySize: 128,
       events: [
         {
-          http: {
+          httpApi: {
             path: '/auth/fill',
             method: 'get',
           },

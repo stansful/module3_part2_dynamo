@@ -5,7 +5,7 @@ import { DynamoDBService } from '@services/dynamoDB.service';
 import { HashingService } from '@services/hashing.service';
 import { DoesNotExistError } from '../errors/does-not-exist';
 
-interface DynamoUserProfile {
+export interface DynamoUserProfile {
   primaryKey: string;
   sortKey: string;
   email: string;

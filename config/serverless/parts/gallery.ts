@@ -2,21 +2,16 @@ import { AWSPartitial } from '../types';
 
 export const galleryConfig: AWSPartitial = {
   functions: {
-    jwtAuthorizerHttpApi: {
-      handler: 'api/auth/handler.authenticate',
-      memorySize: 128,
-    },
-
     apiGalleryGetPictures: {
       handler: 'api/gallery/handler.getPictures',
       memorySize: 128,
       events: [
         {
-          http: {
+          httpApi: {
             path: '/gallery',
             method: 'get',
             authorizer: {
-              name: 'jwtAuthorizerHttpApi',
+              name: 'jwtSimpleAuthorizerHttpApi',
             },
           },
         },
@@ -28,11 +23,11 @@ export const galleryConfig: AWSPartitial = {
       memorySize: 128,
       events: [
         {
-          http: {
+          httpApi: {
             path: '/gallery',
             method: 'post',
             authorizer: {
-              name: 'jwtAuthorizerHttpApi',
+              name: 'jwtSimpleAuthorizerHttpApi',
             },
           },
         },
