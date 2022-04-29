@@ -17,8 +17,8 @@ export class UserService {
   private readonly dynamoDBService: DynamoDBService;
   private readonly hashingService: HashingService;
   private readonly usersTableName = getEnv('USERS_TABLE_NAME');
-  private readonly userPrefix = 'USER#';
-  private readonly profilePrefix = 'PROFILE#';
+  private readonly userPrefix = getEnv('USER_PREFIX');
+  private readonly profilePrefix = getEnv('PROFILE_PREFIX');
 
   constructor() {
     this.dynamoDBService = new DynamoDBService();
@@ -28,8 +28,8 @@ export class UserService {
   public async getProfileByEmail(email: string) {
     const user = await this.dynamoDBService.get(
       this.usersTableName,
-      `${this.userPrefix}${email}`,
-      `${this.profilePrefix}${email}`
+      `${this.userPrefix}#${email}`,
+      `${this.profilePrefix}#${email}`
     );
 
     if (!user?.Item) {
@@ -51,8 +51,8 @@ export class UserService {
 
       return this.dynamoDBService.put(
         this.usersTableName,
-        `${this.userPrefix}${candidate.email}`,
-        `${this.profilePrefix}${candidate.email}`,
+        `${this.userPrefix}#${candidate.email}`,
+        `${this.profilePrefix}#${candidate.email}`,
         {
           email: candidate.email,
           password: encryptedPassword,

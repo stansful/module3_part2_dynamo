@@ -14,9 +14,9 @@ export interface DynamoUserImage {
 export class ImageService {
   private readonly dynamoDBService: DynamoDBService;
   private readonly usersTableName = getEnv('USERS_TABLE_NAME');
-  private readonly userPrefix = 'USER#';
-  private readonly imagePrefix = 'IMAGE#';
-  private readonly publicityImages = 'forAll@public.com';
+  private readonly userPrefix = getEnv('USER_PREFIX');
+  private readonly imagePrefix = getEnv('IMAGE_PREFIX');
+  private readonly publicityImages = getEnv('PUBLICITY_IMAGE_EMAIL');
 
   constructor() {
     this.dynamoDBService = new DynamoDBService();
@@ -27,8 +27,8 @@ export class ImageService {
       this.usersTableName,
       'primaryKey = :user AND begins_with (sortKey , :image)',
       {
-        ':user': this.userPrefix + this.publicityImages,
-        ':image': this.imagePrefix,
+        ':user': `${this.userPrefix}#${this.publicityImages}`,
+        ':image': `${this.imagePrefix}#`,
       }
     );
     return (images?.Items ? images.Items : []) as DynamoUserImage[];
@@ -39,8 +39,8 @@ export class ImageService {
       this.usersTableName,
       'primaryKey = :user AND begins_with (sortKey , :image)',
       {
-        ':user': this.userPrefix + email,
-        ':image': this.imagePrefix,
+        ':user': `${this.userPrefix}#${email}`,
+        ':image': `${this.imagePrefix}#`,
       }
     );
     return (images?.Items ? images.Items : []) as DynamoUserImage[];
@@ -49,8 +49,8 @@ export class ImageService {
   async getByEmailAndImageName(email: string, name: string) {
     const image = await this.dynamoDBService.get(
       this.usersTableName,
-      `${this.userPrefix}${email}`,
-      `${this.imagePrefix}${name}`
+      `${this.userPrefix}#${email}`,
+      `${this.imagePrefix}#${name}`
     );
 
     if (!image?.Item) {
@@ -70,8 +70,8 @@ export class ImageService {
 
       return this.dynamoDBService.put(
         this.usersTableName,
-        `${this.userPrefix}${email}`,
-        `${this.imagePrefix}${image.name}`,
+        `${this.userPrefix}#${email}`,
+        `${this.imagePrefix}#${image.name}`,
         image
       );
     }
