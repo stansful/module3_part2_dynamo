@@ -17,6 +17,8 @@ export class UserService {
   private readonly dynamoDBService: DynamoDBService;
   private readonly hashingService: HashingService;
   private readonly usersTableName = getEnv('USERS_TABLE_NAME');
+  private readonly userPrefix = 'USER#';
+  private readonly profilePrefix = 'PROFILE#';
 
   constructor() {
     this.dynamoDBService = new DynamoDBService();
@@ -24,9 +26,13 @@ export class UserService {
   }
 
   public async getByEmail(email: string) {
-    const user = await this.dynamoDBService.get(this.usersTableName, `USER#${email}`, `PROFILE#${email}`);
+    const user = await this.dynamoDBService.get(
+      this.usersTableName,
+      `${this.userPrefix}${email}`,
+      `${this.profilePrefix}${email}`
+    );
 
-    if (!user?.Item?.email) {
+    if (!user?.Item) {
       throw new DoesNotExistError('User does not exist');
     }
 
@@ -43,11 +49,16 @@ export class UserService {
 
       const encryptedPassword = await this.hashingService.encrypt(candidate.password);
 
-      return this.dynamoDBService.put(this.usersTableName, `USER#${candidate.email}`, `PROFILE#${candidate.email}`, {
-        email: candidate.email,
-        password: encryptedPassword,
-        createdAt: new Date().toLocaleDateString(),
-      });
+      return this.dynamoDBService.put(
+        this.usersTableName,
+        `${this.userPrefix}${candidate.email}`,
+        `${this.profilePrefix}${candidate.email}`,
+        {
+          email: candidate.email,
+          password: encryptedPassword,
+          createdAt: new Date().toLocaleDateString(),
+        }
+      );
     }
     throw new AlreadyExistsError('User already exist');
   }
