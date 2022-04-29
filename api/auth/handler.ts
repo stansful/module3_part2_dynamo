@@ -61,7 +61,7 @@ export const authenticate: Handler<
   try {
     context.callbackWaitsForEmptyEventLoop = false;
 
-    const candidate = await authManager.authenticate(event.authorizationToken);
+    const candidate = await authManager.authenticate(event.headers?.authorization);
 
     return {
       isAuthorized: true,

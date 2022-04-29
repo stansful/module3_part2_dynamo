@@ -1,7 +1,6 @@
 import { HttpBadRequestError, HttpInternalServerError } from '@floteam/errors';
 import { ResponseMessage } from '@interfaces/response-message.interface';
 import { ImageService } from '@services/image.service';
-import { MongoDatabase } from '@services/mongoose';
 import { UserService } from '@services/user.service';
 import fs from 'fs/promises';
 import path from 'path';
@@ -9,9 +8,6 @@ import * as uuid from 'uuid';
 import { MultipartFile } from 'lambda-multipart-parser';
 import { MetaDataService } from '@services/meta-data.service';
 import { RequestGalleryQueryParams, PicturePaths, SanitizedQueryParams } from './gallery.interfaces';
-
-const mongoDB = new MongoDatabase();
-const connect = mongoDB.connect();
 
 export class GalleryService {
   private readonly imageService: ImageService;
@@ -53,15 +49,14 @@ export class GalleryService {
   public async getPictures(query: SanitizedQueryParams, email: string) {
     const { uploadedByUser, skip, limit } = query;
 
+    // TODO: add skip and limit
     try {
-      await connect;
-
       if (uploadedByUser) {
-        const user = await this.userService.getByEmail(email);
-        return this.imageService.getByUserId(user._id, { skip, limit });
+        const user = await this.userService.getProfileByEmail(email);
+        return this.imageService.getByUserEmail(user.email);
       }
 
-      return this.imageService.getAll({ skip, limit });
+      return this.imageService.getAllImages();
     } catch (error) {
       throw new HttpInternalServerError('Cant send pictures...', error.message);
     }
@@ -71,19 +66,13 @@ export class GalleryService {
     const newPictureName = (uuid.v4() + '_' + picture.filename).toLowerCase();
 
     try {
-      await connect;
-
       const metadata = await MetaDataService.getExifMetadata(picture.content);
 
-      await fs.writeFile(path.join(this.picturesPath, newPictureName), picture.content);
-
-      const user = await this.userService.getByEmail(email);
-
-      await this.imageService.create({ path: newPictureName, metadata, belongsTo: user._id });
+      await this.imageService.create({ name: newPictureName, metadata, status: 'Pending' }, email);
 
       return { message: 'Picture uploaded' };
     } catch (error) {
-      throw new HttpInternalServerError('Upload failed...', error.message);
+      throw new HttpInternalServerError(error);
     }
   }
 
@@ -97,13 +86,11 @@ export class GalleryService {
         };
       });
 
-      await connect;
-
       await Promise.all(
         picturesInfo.map(async (pictureInfo) => {
           const pictureBuffer = await fs.readFile(pictureInfo.fsAbsolutePath);
           const data = await MetaDataService.getExifMetadata(pictureBuffer);
-          return this.imageService.create({ path: pictureInfo.fsRelativePath, metadata: data, belongsTo: null });
+          return this.imageService.create({ name: pictureInfo.fsRelativePath, metadata: data, status: 'Pending' });
         })
       );
 

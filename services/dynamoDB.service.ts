@@ -5,6 +5,8 @@ import {
   GetCommandInput,
   PutCommand,
   PutCommandInput,
+  QueryCommand,
+  QueryCommandInput,
   TranslateConfig,
 } from '@aws-sdk/lib-dynamodb';
 import { getEnv } from '@helper/environment';
@@ -14,8 +16,10 @@ export class DynamoDBService {
 
   constructor() {
     const options: TranslateConfig = {
-      marshallOptions: { convertEmptyValues: true },
-      unmarshallOptions: { wrapNumbers: false },
+      marshallOptions: {
+        convertClassInstanceToMap: true,
+        removeUndefinedValues: true,
+      },
     };
     const dynamoDBClient = new DynamoDBClient({ region: getEnv('REGION') });
     this.dynamoDBDocClient = DynamoDBDocumentClient.from(dynamoDBClient, options);
@@ -42,5 +46,18 @@ export class DynamoDBService {
       },
     };
     return this.dynamoDBDocClient.send(new PutCommand(params));
+  }
+
+  public async query(
+    tableName: string,
+    keyConditionExpression: string,
+    expressionAttributeValues: { [p: string]: unknown }
+  ) {
+    const params: QueryCommandInput = {
+      TableName: tableName,
+      KeyConditionExpression: keyConditionExpression,
+      ExpressionAttributeValues: expressionAttributeValues,
+    };
+    return this.dynamoDBDocClient.send(new QueryCommand(params));
   }
 }
