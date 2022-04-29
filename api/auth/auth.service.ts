@@ -29,7 +29,7 @@ export class AuthService {
 
   public async signIn(candidate: RequestUser): Promise<JwtPayload> {
     try {
-      const user = await this.userService.getByEmail(candidate.email);
+      const user = await this.userService.getProfileByEmail(candidate.email);
 
       await this.hashingService.verify(candidate.password, user.password);
 

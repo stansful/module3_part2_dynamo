@@ -25,7 +25,7 @@ export class UserService {
     this.hashingService = new HashingService();
   }
 
-  public async getByEmail(email: string) {
+  public async getProfileByEmail(email: string) {
     const user = await this.dynamoDBService.get(
       this.usersTableName,
       `${this.userPrefix}${email}`,
@@ -41,7 +41,7 @@ export class UserService {
 
   public async create(candidate: Pick<DynamoUserProfile, 'email' | 'password'>) {
     try {
-      await this.getByEmail(candidate.email);
+      await this.getProfileByEmail(candidate.email);
     } catch (error) {
       if (!(error instanceof RuntimeError)) {
         throw new HttpInternalServerError('User creating failed');
