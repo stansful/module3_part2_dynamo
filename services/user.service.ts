@@ -14,16 +14,11 @@ export interface DynamoUserProfile {
 }
 
 export class UserService {
-  private readonly dynamoDBService: DynamoDBService;
-  private readonly hashingService: HashingService;
+  private readonly dynamoDBService = new DynamoDBService();
+  private readonly hashingService = new HashingService();
   private readonly usersTableName = getEnv('USERS_TABLE_NAME');
   private readonly userPrefix = getEnv('USER_PREFIX');
   private readonly profilePrefix = getEnv('PROFILE_PREFIX');
-
-  constructor() {
-    this.dynamoDBService = new DynamoDBService();
-    this.hashingService = new HashingService();
-  }
 
   public async getProfileByEmail(email: string) {
     const user = await this.dynamoDBService.get(

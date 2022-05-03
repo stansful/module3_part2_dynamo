@@ -6,15 +6,9 @@ import { UserService } from '@services/user.service';
 import { JwtPayload, RequestUser } from './auth.interfaces';
 
 export class AuthService {
-  private readonly hashingService: HashingService;
-  private readonly tokenService: TokenService;
-  private readonly userService: UserService;
-
-  constructor() {
-    this.hashingService = new HashingService();
-    this.tokenService = new TokenService();
-    this.userService = new UserService();
-  }
+  private readonly hashingService = new HashingService();
+  private readonly tokenService = new TokenService();
+  private readonly userService = new UserService();
 
   public parseAndValidateIncomingBody(body?: string): RequestUser {
     if (!body) throw new HttpBadRequestError('Please, provide credentials');

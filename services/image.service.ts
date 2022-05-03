@@ -14,15 +14,11 @@ export interface DynamoUserImage {
 }
 
 export class ImageService {
-  private readonly dynamoDBService: DynamoDBService;
+  private readonly dynamoDBService = new DynamoDBService();
   private readonly usersTableName = getEnv('USERS_TABLE_NAME');
   private readonly userPrefix = getEnv('USER_PREFIX');
   private readonly imagePrefix = getEnv('IMAGE_PREFIX');
   private readonly publicityImages = getEnv('PUBLICITY_IMAGE_EMAIL');
-
-  constructor() {
-    this.dynamoDBService = new DynamoDBService();
-  }
 
   async getAllImages() {
     const images = await this.dynamoDBService.query(
