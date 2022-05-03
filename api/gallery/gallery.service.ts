@@ -1,24 +1,24 @@
 import { HttpBadRequestError, HttpInternalServerError } from '@floteam/errors';
+import { getEnv } from '@helper/environment';
 import { ResponseMessage } from '@interfaces/response-message.interface';
 import { ImageService } from '@services/image.service';
+import { S3Service } from '@services/s3.service';
 import { UserService } from '@services/user.service';
 import fs from 'fs/promises';
 import path from 'path';
+import { ExifData } from 'ts-exif-parser';
 import * as uuid from 'uuid';
 import { MultipartFile } from 'lambda-multipart-parser';
 import { MetaDataService } from '@services/meta-data.service';
 import { RequestGalleryQueryParams, PicturePaths, SanitizedQueryParams } from './gallery.interfaces';
 
 export class GalleryService {
-  private readonly imageService: ImageService;
-  private readonly userService: UserService;
+  private readonly imageService = new ImageService();
+  private readonly userService = new UserService();
+  private readonly s3Service = new S3Service();
+  private readonly imageBucket = getEnv('BUCKET');
+  private readonly pictureLimit = getEnv('DEFAULT_PICTURE_LIMIT');
   private readonly picturesPath = path.resolve(__dirname, '..', '..', '..', '..', 'static', 'pictures');
-  private readonly pictureLimit = Number(process.env.DEFAULT_PICTURE_LIMIT) || 6;
-
-  constructor() {
-    this.imageService = new ImageService();
-    this.userService = new UserService();
-  }
 
   private parseQueryParam(defaultValue: number, num?: string): number {
     if (!num) {
@@ -38,7 +38,7 @@ export class GalleryService {
 
   public validateAndSanitizeQuery(query: RequestGalleryQueryParams): SanitizedQueryParams {
     const requestPage = this.parseQueryParam(1, query.page);
-    const limit = this.parseQueryParam(this.pictureLimit, query.limit);
+    const limit = this.parseQueryParam(parseInt(this.pictureLimit), query.limit);
 
     const skip = requestPage * limit - limit;
     const uploadedByUser = query.filter === 'true';
@@ -74,6 +74,23 @@ export class GalleryService {
     } catch (error) {
       throw new HttpInternalServerError(error);
     }
+  }
+
+  public async getPreSignedUploadLink(email: string) {
+    const generatedImageName = (uuid.v4() + '.jpeg').toLowerCase();
+
+    await this.imageService.create({ name: generatedImageName, metadata: {} as ExifData, status: 'Pending' }, email);
+
+    const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
+
+    return { key: generatedImageName, uploadUrl };
+  }
+
+  public async updateImageStatus(imageName: string) {
+    const images = await this.imageService.getByImageName(imageName);
+    const image = images[0];
+    const email = image.primaryKey.split('#')[1];
+    await this.imageService.update(email, imageName, { ...image, status: 'Uploaded' });
   }
 
   public async uploadExistingPictures(): Promise<ResponseMessage> {

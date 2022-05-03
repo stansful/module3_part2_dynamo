@@ -6,6 +6,8 @@ import { ExifData } from 'ts-exif-parser';
 import { DoesNotExistError } from '../errors/does-not-exist';
 
 export interface DynamoUserImage {
+  primaryKey: string;
+  sortKey: string;
   name: string;
   metadata: ExifData;
   status: 'Uploaded' | 'Pending' | 'Rejected';
@@ -46,6 +48,19 @@ export class ImageService {
     return (images?.Items ? images.Items : []) as DynamoUserImage[];
   }
 
+  async getByImageName(imageName: string) {
+    const images = await this.dynamoDBService.query(
+      this.usersTableName,
+      'sortKey = :image AND begins_with (primaryKey , :user)',
+      {
+        ':image': `${this.imagePrefix}#${imageName}`,
+        ':user': `${this.userPrefix}#`,
+      },
+      'InvertedIndexes'
+    );
+    return (images?.Items ? images.Items : []) as DynamoUserImage[];
+  }
+
   async getByEmailAndImageName(email: string, name: string) {
     const image = await this.dynamoDBService.get(
       this.usersTableName,
@@ -60,7 +75,7 @@ export class ImageService {
     return image.Item as DynamoUserImage;
   }
 
-  async create(image: DynamoUserImage, email = this.publicityImages) {
+  async create(image: Omit<DynamoUserImage, 'primaryKey' | 'sortKey'>, email = this.publicityImages) {
     try {
       await this.getByEmailAndImageName(email, image.name);
     } catch (error) {
@@ -76,5 +91,14 @@ export class ImageService {
       );
     }
     throw new AlreadyExistsError('Image already exist');
+  }
+
+  async update(email: string, imageName: string, attributes: Partial<Omit<DynamoUserImage, 'primaryKey' | 'sortKey'>>) {
+    return this.dynamoDBService.put(
+      this.usersTableName,
+      `${this.userPrefix}#${email}`,
+      `${this.imagePrefix}#${imageName}`,
+      attributes
+    );
   }
 }

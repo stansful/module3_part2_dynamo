@@ -21,7 +21,10 @@ export const usersTableConfig: AWSPartitial = {
               'dynamodb:BatchGetItem',
               'dynamodb:BatchWriteItem',
             ],
-            Resource: 'arn:aws:dynamodb:*:*:table/${self:custom.tablesNames.UsersTable.${self:provider.stage}}',
+            Resource: [
+              'arn:aws:dynamodb:*:*:table/${self:custom.tablesNames.UsersTable.${self:provider.stage}}',
+              'arn:aws:dynamodb:*:*:table/${self:custom.tablesNames.UsersTable.${self:provider.stage}}/index/*',
+            ],
           },
         ],
       },
@@ -51,6 +54,24 @@ export const usersTableConfig: AWSPartitial = {
             {
               AttributeName: 'sortKey',
               KeyType: 'RANGE',
+            },
+          ],
+          GlobalSecondaryIndexes: [
+            {
+              IndexName: 'InvertedIndexes',
+              KeySchema: [
+                {
+                  AttributeName: 'sortKey',
+                  KeyType: 'HASH',
+                },
+                {
+                  AttributeName: 'primaryKey',
+                  KeyType: 'RANGE',
+                },
+              ],
+              Projection: {
+                ProjectionType: 'ALL',
+              },
             },
           ],
           BillingMode: 'PAY_PER_REQUEST',

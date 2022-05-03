@@ -34,6 +34,35 @@ export const galleryConfig: AWSPartitial = {
       ],
     },
 
+    apiGalleryGetPreSignedUploadLink: {
+      handler: 'api/gallery/handler.getPreSignedUploadLink',
+      memorySize: 128,
+      events: [
+        {
+          httpApi: {
+            path: '/gallery/upload',
+            method: 'get',
+            authorizer: {
+              name: 'jwtSimpleAuthorizerHttpApi',
+            },
+          },
+        },
+      ],
+    },
+
+    triggerS3Upload: {
+      handler: 'api/gallery/handler.s3Upload',
+      events: [
+        {
+          s3: {
+            bucket: '${file(env.yml):${self:provider.stage}.BUCKET}',
+            event: 's3:ObjectCreated:*',
+            existing: true,
+          },
+        },
+      ],
+    },
+
     apiParseAndUploadExistingPictures: {
       handler: 'api/gallery/handler.uploadExistingPictures',
       memorySize: 128,

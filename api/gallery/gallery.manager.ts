@@ -32,4 +32,12 @@ export class GalleryManager {
   public uploadExistingPictures() {
     return this.galleryService.uploadExistingPictures();
   }
+
+  public getPreSignedUploadLink(email: string) {
+    return this.galleryService.getPreSignedUploadLink(email);
+  }
+
+  public updateImageStatus(imageName: string) {
+    return this.galleryService.updateImageStatus(imageName);
+  }
 }

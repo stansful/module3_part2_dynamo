@@ -51,10 +51,12 @@ export class DynamoDBService {
   public async query(
     tableName: string,
     keyConditionExpression: string,
-    expressionAttributeValues: { [p: string]: unknown }
+    expressionAttributeValues: { [p: string]: unknown },
+    indexName?: string
   ) {
     const params: QueryCommandInput = {
       TableName: tableName,
+      IndexName: indexName,
       KeyConditionExpression: keyConditionExpression,
       ExpressionAttributeValues: expressionAttributeValues,
     };

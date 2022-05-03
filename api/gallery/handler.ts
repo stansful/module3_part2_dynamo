@@ -1,7 +1,7 @@
 import { errorHandler } from '@helper/http-api/error-handler';
 import { createResponse } from '@helper/http-api/response';
 import { log } from '@helper/logger';
-import { APIGatewayProxyHandlerV2, APIGatewayProxyWithLambdaAuthorizerHandler } from 'aws-lambda';
+import { APIGatewayProxyHandlerV2, APIGatewayProxyWithLambdaAuthorizerHandler, S3Handler } from 'aws-lambda';
 import { RequestGalleryQueryParams } from './gallery.interfaces';
 import { GalleryManager } from './gallery.manager';
 import multipartParser from 'lambda-multipart-parser';
@@ -52,6 +52,29 @@ export const uploadPicture: APIGatewayProxyHandlerV2 = async (event, context) =>
 
     return errorHandler(error);
   }
+};
+
+export const getPreSignedUploadLink: APIGatewayProxyHandlerV2 = async (event) => {
+  log(event);
+
+  try {
+    // @ts-ignore
+    const email = event.requestContext.authorizer.lambda.email;
+
+    const response = await galleryManager.getPreSignedUploadLink(email);
+
+    return createResponse(200, response);
+  } catch (error) {
+    return errorHandler(error);
+  }
+};
+
+export const s3Upload: S3Handler = async (event) => {
+  log(event);
+
+  const imageName = event.Records[0].s3.object.key;
+
+  await galleryManager.updateImageStatus(imageName);
 };
 
 export const uploadExistingPictures: APIGatewayProxyHandlerV2 = async (event, context) => {
