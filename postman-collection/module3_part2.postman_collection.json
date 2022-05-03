@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "113c6011-1a2c-49bb-8753-34294798e069",
+		"_postman_id": "b765580a-9aa0-4b03-baac-96e80b00688c",
 		"name": "module3_part1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -86,7 +86,7 @@
 						{
 							"key": "picture",
 							"type": "file",
-							"src": "/Users/philipp/Downloads/istockphoto-13.jpeg"
+							"src": "/home/seven/Downloads/lion.jpeg"
 						}
 					],
 					"options": {
@@ -99,6 +99,78 @@
 					"raw": "{{dev}}gallery",
 					"host": [
 						"{{dev}}gallery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get preSigned upload link",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{dev}}gallery/upload",
+					"host": [
+						"{{dev}}gallery"
+					],
+					"path": [
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload pictures to the bucket",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/home/seven/Downloads/hello-i-m-nik-Fjm3JkHiLhw-unsplash.jpeg"
+					}
+				},
+				"url": {
+					"raw": "https://image-bucket-uniq-uuid.s3.amazonaws.com/cca3caf3-9bf5-4586-95ec-0399f57c85da.jpeg?AWSAccessKeyId=ASIAQBHJIHFMRQRUSAHN&Content-Type=image%2Fjpeg&Expires=1651619410&Signature=GaPPGpdFDrzptUO2ygzQoDf9gFA%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEJ%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQDQ4KFsBsIBWxwUBFxCItAnWY2WW%2BC5KdL4XxTda%2FWOzgIgIAGThua3Mqw6EhHsS7XQ5Gt2eV%2BZXx%2BTYBJ0xryZUBkqvgIIaBAAGgwwMDI2MzY2NTkwMzMiDMrMm3nIQYBJIG1HVyqbAv2yNaMg5hlzdkSv%2BcK0pdoxfcm6Ge91bd1HwdSg08WHKItAt7rslB3Cn5LaLNHXXj24OMqGlM2cS%2FQ%2Bw67jfihjktWthKNHYHpW41IYukWzJkYaj3UZVt6b9ucMlepCG7PChGh359wFz%2F4nvhG9%2Bz0gbFUOnbMI6qMus%2B6rh3UHOI%2BaluTgJQ5R8Fyt%2BUjESvJEXgqOiwyahSADtx5GR8JRkDLbAZw%2FZQmewWwo2C5cYf%2Fo2iVGGELwebelsu6NylT3yzzZxVW9KIDsIG%2FxNy9oY42gSe5osYcM1SIaGIR9Ma2SheblAdyeTSNOhrPFRBzOc%2F1T0h%2BvQj2hfxdbVcXvQhKJAsjBgMPQkKMO8lvTeW2ELachXvaqrigw%2BOfGkwY6mwHPaseQ9WYZlUMijb%2BVoCZgIMShXeBJgGqzVYS%2FomhFwp1UvvPsh1CaRLmWeD4wmdVJ3o73pPsedXpYV5HEA9XCQl35HQRvfYgOj%2BjAys8nn4AhRrzcHPFh3wBpn4GW0cifVYDLE%2B5lHsKnwaabjvrvpsir9RukUPgF%2Fn%2B8ep7R3Dbz5BjCt%2BA6fd5v6KbOD4c%2BbGzfpikIrnQo3A%3D%3D",
+					"protocol": "https",
+					"host": [
+						"image-bucket-uniq-uuid",
+						"s3",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"cca3caf3-9bf5-4586-95ec-0399f57c85da.jpeg"
+					],
+					"query": [
+						{
+							"key": "AWSAccessKeyId",
+							"value": "ASIAQBHJIHFMRQRUSAHN"
+						},
+						{
+							"key": "Content-Type",
+							"value": "image%2Fjpeg"
+						},
+						{
+							"key": "Expires",
+							"value": "1651619410"
+						},
+						{
+							"key": "Signature",
+							"value": "GaPPGpdFDrzptUO2ygzQoDf9gFA%3D"
+						},
+						{
+							"key": "x-amz-security-token",
+							"value": "IQoJb3JpZ2luX2VjEJ%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQDQ4KFsBsIBWxwUBFxCItAnWY2WW%2BC5KdL4XxTda%2FWOzgIgIAGThua3Mqw6EhHsS7XQ5Gt2eV%2BZXx%2BTYBJ0xryZUBkqvgIIaBAAGgwwMDI2MzY2NTkwMzMiDMrMm3nIQYBJIG1HVyqbAv2yNaMg5hlzdkSv%2BcK0pdoxfcm6Ge91bd1HwdSg08WHKItAt7rslB3Cn5LaLNHXXj24OMqGlM2cS%2FQ%2Bw67jfihjktWthKNHYHpW41IYukWzJkYaj3UZVt6b9ucMlepCG7PChGh359wFz%2F4nvhG9%2Bz0gbFUOnbMI6qMus%2B6rh3UHOI%2BaluTgJQ5R8Fyt%2BUjESvJEXgqOiwyahSADtx5GR8JRkDLbAZw%2FZQmewWwo2C5cYf%2Fo2iVGGELwebelsu6NylT3yzzZxVW9KIDsIG%2FxNy9oY42gSe5osYcM1SIaGIR9Ma2SheblAdyeTSNOhrPFRBzOc%2F1T0h%2BvQj2hfxdbVcXvQhKJAsjBgMPQkKMO8lvTeW2ELachXvaqrigw%2BOfGkwY6mwHPaseQ9WYZlUMijb%2BVoCZgIMShXeBJgGqzVYS%2FomhFwp1UvvPsh1CaRLmWeD4wmdVJ3o73pPsedXpYV5HEA9XCQl35HQRvfYgOj%2BjAys8nn4AhRrzcHPFh3wBpn4GW0cifVYDLE%2B5lHsKnwaabjvrvpsir9RukUPgF%2Fn%2B8ep7R3Dbz5BjCt%2BA6fd5v6KbOD4c%2BbGzfpikIrnQo3A%3D%3D"
+						}
 					]
 				}
 			},
@@ -215,6 +287,16 @@
 		{
 			"key": "local3",
 			"value": "http://localhost:3000/",
+			"type": "default"
+		},
+		{
+			"key": "dev",
+			"value": "https://41yzl6mgh2.execute-api.us-east-1.amazonaws.com/",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzZXJnZWV2QGZsby50ZWFtIiwiaWF0IjoxNjUxNjEwNDgxfQ.vW2OVOYPZfrUxdCT3azN8XVd7fP506bgPc6hAm4lQyo",
 			"type": "default"
 		}
 	]
