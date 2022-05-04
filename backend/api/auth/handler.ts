@@ -38,20 +38,6 @@ export const signUp: APIGatewayProxyHandlerV2 = async (event, context) => {
   }
 };
 
-export const uploadDevUsers: APIGatewayProxyHandlerV2 = async (event, context) => {
-  log(event);
-
-  try {
-    context.callbackWaitsForEmptyEventLoop = false;
-
-    const response = await authManager.uploadDevUsers();
-
-    return createResponse(201, response);
-  } catch (error) {
-    return errorHandler(error);
-  }
-};
-
 export const authenticate: Handler<
   APIGatewayRequestAuthorizerHttpApiPayloadV2Event,
   APIGatewayAuthorizerSimpleResult

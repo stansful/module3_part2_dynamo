@@ -18,10 +18,6 @@ export class AuthManager {
     return this.authService.signUp(candidate);
   }
 
-  public async uploadDevUsers() {
-    return this.authService.uploadDevUsers();
-  }
-
   public async authenticate(token?: string) {
     if (!token) {
       throw new HttpUnauthorizedError('Please, provide token');
