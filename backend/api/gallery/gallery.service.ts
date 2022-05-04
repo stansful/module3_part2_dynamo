@@ -1,5 +1,6 @@
 import { HttpBadRequestError, HttpInternalServerError } from '@floteam/errors';
 import { getEnv } from '@helper/environment';
+import { log } from '@helper/logger';
 import { ResponseMessage } from '@interfaces/response-message.interface';
 import { ImageService } from '@services/dynamoDB/entities/image.service';
 import { S3Service } from '@services/s3.service';
@@ -78,10 +79,10 @@ export class GalleryService {
     }
   }
 
-  public async getPreSignedUploadLink(email: string) {
+  public async getPreSignedUploadLink(email: string, metadata: ExifData) {
     const generatedImageName = (uuid.v4() + '.jpeg').toLowerCase();
-
-    await this.imageService.create({ name: generatedImageName, metadata: {} as ExifData, status: 'Pending' }, email);
+    log(metadata);
+    await this.imageService.create({ name: generatedImageName, metadata, status: 'Pending' }, email);
 
     const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
 

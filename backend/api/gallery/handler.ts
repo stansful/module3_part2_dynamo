@@ -61,7 +61,7 @@ export const getPreSignedUploadLink: APIGatewayProxyHandlerV2 = async (event) =>
     // @ts-ignore
     const email = event.requestContext.authorizer.lambda.email;
 
-    const response = await galleryManager.getPreSignedUploadLink(email);
+    const response = await galleryManager.getPreSignedUploadLink(email, event.body);
 
     return createResponse(200, response);
   } catch (error) {

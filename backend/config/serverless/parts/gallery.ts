@@ -41,7 +41,7 @@ export const galleryConfig: AWSPartitial = {
         {
           httpApi: {
             path: '/gallery/upload',
-            method: 'get',
+            method: 'post',
             authorizer: {
               name: 'jwtSimpleAuthorizerHttpApi',
             },

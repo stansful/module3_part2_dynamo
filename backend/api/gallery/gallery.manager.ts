@@ -33,8 +33,19 @@ export class GalleryManager {
     return this.galleryService.uploadExistingPictures();
   }
 
-  public getPreSignedUploadLink(email: string) {
-    return this.galleryService.getPreSignedUploadLink(email);
+  public getPreSignedUploadLink(email: string, body?: string) {
+    if (!body) {
+      throw new HttpBadRequestError('Please, provide picture metadata');
+    }
+
+    const parsedBody = JSON.parse(body);
+    const metadata = parsedBody?.metadata;
+
+    if (!metadata) {
+      throw new HttpBadRequestError('Please, provide picture metadata');
+    }
+
+    return this.galleryService.getPreSignedUploadLink(email, metadata);
   }
 
   public updateImageStatus(imageName: string) {
