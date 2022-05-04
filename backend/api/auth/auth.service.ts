@@ -2,7 +2,7 @@ import { HttpBadRequestError, HttpUnauthorizedError } from '@floteam/errors';
 import { ResponseMessage } from '@interfaces/response-message.interface';
 import { HashingService } from '@services/hashing.service';
 import { TokenService } from '@services/token.service';
-import { UserService } from '@services/user.service';
+import { UserService } from '@services/dynamoDB/entities/user.service';
 import { JwtPayload, RequestUser } from './auth.interfaces';
 
 export class AuthService {

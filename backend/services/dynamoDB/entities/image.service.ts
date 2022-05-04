@@ -1,9 +1,9 @@
 import { AlreadyExistsError, HttpInternalServerError } from '@floteam/errors';
 import { RuntimeError } from '@floteam/errors/runtime/runtime-error';
 import { getEnv } from '@helper/environment';
-import { DynamoDBService } from '@services/dynamoDB.service';
+import { DynamoDBService } from '@services/dynamoDB/dynamoDB.service';
 import { ExifData } from 'ts-exif-parser';
-import { DoesNotExistError } from '../errors/does-not-exist';
+import { DoesNotExistError } from '../../../errors/does-not-exist';
 
 export interface DynamoUserImage {
   primaryKey: string;

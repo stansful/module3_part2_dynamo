@@ -1,9 +1,9 @@
 import { HttpBadRequestError, HttpInternalServerError } from '@floteam/errors';
 import { getEnv } from '@helper/environment';
 import { ResponseMessage } from '@interfaces/response-message.interface';
-import { ImageService } from '@services/image.service';
+import { ImageService } from '@services/dynamoDB/entities/image.service';
 import { S3Service } from '@services/s3.service';
-import { UserService } from '@services/user.service';
+import { UserService } from '@services/dynamoDB/entities/user.service';
 import fs from 'fs/promises';
 import path from 'path';
 import { ExifData } from 'ts-exif-parser';
