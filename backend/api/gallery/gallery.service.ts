@@ -2,7 +2,7 @@ import { HttpBadRequestError, HttpInternalServerError } from '@floteam/errors';
 import { getEnv } from '@helper/environment';
 import { log } from '@helper/logger';
 import { ResponseMessage } from '@interfaces/response-message.interface';
-import { ImageService } from '@services/dynamoDB/entities/image.service';
+import { DynamoUserImage, ImageService } from '@services/dynamoDB/entities/image.service';
 import { S3Service } from '@services/s3.service';
 import { UserService } from '@services/dynamoDB/entities/user.service';
 import fs from 'fs/promises';
@@ -49,7 +49,7 @@ export class GalleryService {
 
   public async getPictures(query: SanitizedQueryParams, email: string) {
     const { uploadedByUser, skip, limit } = query;
-    let pictures;
+    let pictures = [] as DynamoUserImage[];
 
     try {
       if (uploadedByUser) {
@@ -59,7 +59,17 @@ export class GalleryService {
         pictures = await this.imageService.getAllImages();
       }
 
-      return pictures.filter((picture) => picture.status === 'Uploaded').slice(skip, skip + limit);
+      return Promise.all(
+        pictures
+          .filter((picture) => picture.status === 'Uploaded')
+          .slice(skip, skip + limit)
+          .map(async (picture) => {
+            return {
+              path: await this.s3Service.getPreSignedGetUrl(picture.name, this.imageBucket),
+              metadata: picture.metadata,
+            };
+          })
+      );
     } catch (error) {
       throw new HttpInternalServerError('Cant send pictures...', error.message);
     }
