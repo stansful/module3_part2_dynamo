@@ -68,7 +68,7 @@ export class GalleryService {
     try {
       const metadata = await MetaDataService.getExifMetadata(picture.content);
 
-      await this.imageService.create({ name: newPictureName, metadata, status: 'Pending' }, email);
+      await this.imageService.create({ name: newPictureName, metadata, status: 'Uploaded' }, email);
 
       return { message: 'Picture uploaded' };
     } catch (error) {
