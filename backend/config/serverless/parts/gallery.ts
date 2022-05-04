@@ -59,18 +59,5 @@ export const galleryConfig: AWSPartitial = {
         },
       ],
     },
-
-    apiParseAndUploadExistingPictures: {
-      handler: 'api/gallery/handler.uploadExistingPictures',
-      memorySize: 128,
-      events: [
-        {
-          http: {
-            path: '/gallery/fill',
-            method: 'get',
-          },
-        },
-      ],
-    },
   },
 };

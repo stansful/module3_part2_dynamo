@@ -9,8 +9,3 @@ export interface SanitizedQueryParams {
   skip: number;
   uploadedByUser: boolean;
 }
-
-export interface PicturePaths {
-  fsRelativePath: string;
-  fsAbsolutePath: string;
-}

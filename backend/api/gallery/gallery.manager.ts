@@ -29,10 +29,6 @@ export class GalleryManager {
     return this.galleryService.uploadPicture(picture);
   }
 
-  public uploadExistingPictures() {
-    return this.galleryService.uploadExistingPictures();
-  }
-
   public getPreSignedUploadLink(email: string, body?: string) {
     if (!body) {
       throw new HttpBadRequestError('Please, provide picture metadata');

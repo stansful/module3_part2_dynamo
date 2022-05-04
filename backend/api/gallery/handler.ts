@@ -70,15 +70,3 @@ export const s3Upload: S3Handler = async (event) => {
 
   await galleryManager.updateImageStatus(imageName);
 };
-
-export const uploadExistingPictures: APIGatewayProxyHandlerV2 = async (event) => {
-  log(event);
-
-  try {
-    const response = await galleryManager.uploadExistingPictures();
-
-    return createResponse(201, response);
-  } catch (error) {
-    return errorHandler(error);
-  }
-};
