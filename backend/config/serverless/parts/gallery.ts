@@ -47,7 +47,7 @@ export const galleryConfig: AWSPartitial = {
       ],
     },
 
-    triggerGalleryS3Upload: {
+    triggerS3Upload: {
       handler: 'api/gallery/handler.s3Upload',
       events: [
         {

@@ -8,14 +8,8 @@ interface Token {
 }
 
 interface Gallery {
-  objects: [
-    {
-      _id: string;
-      path: string;
-      metadata: {};
-    },
-  ];
-  page: number;
+  metadata: {};
+  path: string;
 }
 
 interface ErrorMessage {

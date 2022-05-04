@@ -45,7 +45,6 @@ const sendingFormEvent = async (event: Event) => {
   try {
     await apiRequest.post(`/gallery`, formData, getToken());
   } catch (error) {
-    console.log(error);
     return alert('Upload failed');
   }
   sendingFormSubmitInput.disabled = false;
@@ -54,14 +53,14 @@ const sendingFormEvent = async (event: Event) => {
   await showGallery();
 };
 
-const checkPageLimitsAndBorders = async (data: Gallery, page: string, filter: string) => {
-  if (Number(page) === 1 && filter === 'true' && !data.objects.length) {
+const checkPageLimitsAndBorders = async (data: Gallery[], page: string, filter: string) => {
+  if (Number(page) === 1 && filter === 'true' && !data.length) {
     alert(UPLOADED_PICTURES_NOT_FOUND);
     setFilter();
     await showGallery();
     return;
   }
-  if (!data.objects.length || Number(page) < 1) {
+  if (!data.length || Number(page) < 1) {
     alert(PAGE_DOES_NOT_EXIST);
     setNewPage();
     await showGallery();
@@ -77,12 +76,10 @@ const showGallery = async (page = getCurrentPage(), limit = getLimit(), filter =
   queryFilterButton.checked = filter === 'true';
 
   try {
-    const data: Gallery = await apiRequest.get(`/gallery${query}`);
+    const data: Gallery[] = await apiRequest.get(`/gallery${query}`);
     await checkPageLimitsAndBorders(data, page, filter);
     gallery.innerHTML = '';
-    data.objects.forEach(
-      (imgLink) => (gallery.innerHTML += `<img src='${imgLink.path}' width='200' height='200' alt='img'>`),
-    );
+    data.forEach((imgLink) => (gallery.innerHTML += `<img src='${imgLink.path}' width='200' height='200' alt='img'>`));
   } catch (e) {
     console.log(e);
   }
