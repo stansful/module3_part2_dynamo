@@ -1,6 +1,9 @@
 # ide
 .idea
+.git
+node_modules
 
+# Backend
 # package directories
 backend/node_modules
 backend/offline
@@ -11,7 +14,6 @@ backend/.webpack/
 backend/**/.webpack
 backend/.tmp
 backend/.scannerwork/
-
 # Serverless directories
 backend/.serverless/
 backend/.build/
@@ -24,3 +26,9 @@ backend/typings/
 backend/documentation/
 backend/coverage/
 backend/.esbuild/
+
+# Frontend
+frontend/.idea
+frontend/.git
+frontend/js
+frontend/node_modules

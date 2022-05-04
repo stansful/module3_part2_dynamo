@@ -1,0 +1,19 @@
+{
+  "name": "module3_part2_dynamo",
+  "version": "1.0.0",
+  "description": "serverless and dynamodb learning",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stansful/module3_part2_dynamo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stansful/module3_part2_dynamo/issues"
+  },
+  "author": "stansful <stansful@gmail.com>",
+  "license": "ISC",
+  "scripts": {
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "build:backend": "cd backend && npm install && npm run build"
+  }
+}
