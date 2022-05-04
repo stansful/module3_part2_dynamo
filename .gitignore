@@ -1,23 +1,26 @@
+# ide
+.idea
+
 # package directories
-node_modules
-offline
-jspm_packages
-.idea/
-.vscode/
-.webpack/
-**/.webpack
-.tmp
-.scannerwork/
+backend/node_modules
+backend/offline
+backend/jspm_packages
+backend/.idea/
+backend/.vscode/
+backend/.webpack/
+backend/**/.webpack
+backend/.tmp
+backend/.scannerwork/
 
 # Serverless directories
-.serverless/
-.build/
-kms_key.yml
-.env
-**/.env
-**/api/**.js
-.nyc_output/
-typings/
-documentation/
-coverage/
-.esbuild/
+backend/.serverless/
+backend/.build/
+backend/kms_key.yml
+backend/.env
+backend/**/.env
+backend/**/api/**.js
+backend/.nyc_output/
+backend/typings/
+backend/documentation/
+backend/coverage/
+backend/.esbuild/
