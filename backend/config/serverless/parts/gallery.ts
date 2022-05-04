@@ -20,7 +20,7 @@ export const galleryConfig: AWSPartitial = {
 
     apiGalleryUploadPicture: {
       handler: 'api/gallery/handler.uploadPicture',
-      memorySize: 128,
+      memorySize: 256,
       events: [
         {
           httpApi: {

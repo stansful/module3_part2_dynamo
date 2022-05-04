@@ -49,7 +49,7 @@ export class GalleryService {
 
   public async getPictures(query: SanitizedQueryParams, email: string) {
     const { uploadedByUser, skip, limit } = query;
-    let pictures = [] as DynamoUserImage[];
+    let pictures: DynamoUserImage[];
 
     try {
       if (uploadedByUser) {
@@ -81,7 +81,8 @@ export class GalleryService {
     try {
       const metadata = await MetaDataService.getExifMetadata(picture.content);
 
-      await this.imageService.create({ name: newPictureName, metadata, status: 'Uploaded' });
+      await this.s3Service.put(newPictureName, picture.content, this.imageBucket);
+      await this.imageService.create({ name: newPictureName, metadata, status: 'Pending' });
 
       return { message: 'Picture uploaded' };
     } catch (error) {
