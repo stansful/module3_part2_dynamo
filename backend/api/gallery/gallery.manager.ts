@@ -15,7 +15,7 @@ export class GalleryManager {
     return this.galleryService.getPictures(sanitizedQuery, email);
   }
 
-  public uploadPicture(pictures: MultipartRequest, email: string) {
+  public uploadPicture(pictures: MultipartRequest) {
     if (!pictures.files.length) {
       throw new HttpBadRequestError('File missing');
     }
@@ -26,7 +26,7 @@ export class GalleryManager {
       throw new HttpBadRequestError('Unfortunately we support only jpeg');
     }
 
-    return this.galleryService.uploadPicture(picture, email);
+    return this.galleryService.uploadPicture(picture);
   }
 
   public uploadExistingPictures() {

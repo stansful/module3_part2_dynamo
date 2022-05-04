@@ -75,17 +75,17 @@ export class GalleryService {
     }
   }
 
-  public async uploadPicture(picture: MultipartFile, email: string): Promise<ResponseMessage> {
-    const newPictureName = (uuid.v4() + '_' + picture.filename).toLowerCase();
+  public async uploadPicture(picture: MultipartFile): Promise<ResponseMessage> {
+    const newPictureName = picture.filename.toLowerCase();
 
     try {
       const metadata = await MetaDataService.getExifMetadata(picture.content);
 
-      await this.imageService.create({ name: newPictureName, metadata, status: 'Uploaded' }, email);
+      await this.imageService.create({ name: newPictureName, metadata, status: 'Uploaded' });
 
       return { message: 'Picture uploaded' };
     } catch (error) {
-      throw new HttpInternalServerError(error);
+      throw new HttpBadRequestError('Default pictures already exist');
     }
   }
 

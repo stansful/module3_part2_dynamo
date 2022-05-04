@@ -26,9 +26,6 @@ export const galleryConfig: AWSPartitial = {
           httpApi: {
             path: '/gallery',
             method: 'post',
-            authorizer: {
-              name: 'jwtSimpleAuthorizerHttpApi',
-            },
           },
         },
       ],
@@ -50,7 +47,7 @@ export const galleryConfig: AWSPartitial = {
       ],
     },
 
-    triggerS3Upload: {
+    triggerGalleryS3Upload: {
       handler: 'api/gallery/handler.s3Upload',
       events: [
         {

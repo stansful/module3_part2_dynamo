@@ -10,12 +10,10 @@ const galleryManager = new GalleryManager();
 
 export const getPictures: APIGatewayProxyWithLambdaAuthorizerHandler<{
   lambda: { email: string };
-}> = async (event, context) => {
+}> = async (event) => {
   log(event);
 
   try {
-    context.callbackWaitsForEmptyEventLoop = false;
-
     const query: RequestGalleryQueryParams = {
       page: event.queryStringParameters?.page,
       limit: event.queryStringParameters?.limit,
@@ -32,17 +30,13 @@ export const getPictures: APIGatewayProxyWithLambdaAuthorizerHandler<{
   }
 };
 
-export const uploadPicture: APIGatewayProxyHandlerV2 = async (event, context) => {
+export const uploadPicture: APIGatewayProxyHandlerV2 = async (event) => {
   log(event);
   try {
-    context.callbackWaitsForEmptyEventLoop = false;
-
-    // @ts-ignore
-    const email = event.requestContext.authorizer.lambda.email;
     // @ts-ignore
     const pictures = await multipartParser.parse(event);
 
-    const response = await galleryManager.uploadPicture(pictures, email);
+    const response = await galleryManager.uploadPicture(pictures);
 
     return createResponse(201, response);
   } catch (error) {
@@ -77,12 +71,10 @@ export const s3Upload: S3Handler = async (event) => {
   await galleryManager.updateImageStatus(imageName);
 };
 
-export const uploadExistingPictures: APIGatewayProxyHandlerV2 = async (event, context) => {
+export const uploadExistingPictures: APIGatewayProxyHandlerV2 = async (event) => {
   log(event);
 
   try {
-    context.callbackWaitsForEmptyEventLoop = false;
-
     const response = await galleryManager.uploadExistingPictures();
 
     return createResponse(201, response);
