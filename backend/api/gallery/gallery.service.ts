@@ -48,15 +48,17 @@ export class GalleryService {
 
   public async getPictures(query: SanitizedQueryParams, email: string) {
     const { uploadedByUser, skip, limit } = query;
+    let pictures;
 
-    // TODO: add skip and limit
     try {
       if (uploadedByUser) {
         const user = await this.userService.getProfileByEmail(email);
-        return this.imageService.getByUserEmail(user.email);
+        pictures = await this.imageService.getByUserEmail(user.email);
+      } else {
+        pictures = await this.imageService.getAllImages();
       }
 
-      return this.imageService.getAllImages();
+      return pictures.filter((picture) => picture.status === 'Uploaded').slice(skip, skip + limit);
     } catch (error) {
       throw new HttpInternalServerError('Cant send pictures...', error.message);
     }
