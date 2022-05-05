@@ -4,12 +4,14 @@ import { PutObjectOutput, PutObjectRequest } from 'aws-sdk/clients/s3';
 
 export class S3Service {
   private readonly s3 = new S3({ region: getEnv('REGION') });
+  private readonly preSignedGetExpiresTimeInMinutes = Number(getEnv('PRE_SIGNED_GET_EXPIRES_TIME'));
+  private readonly preSignedPutExpiresTimeInMinutes = Number(getEnv('PRE_SIGNED_PUT_EXPIRES_TIME'));
 
   public async getPreSignedGetUrl(key: string, bucket: string) {
     const params = {
       Bucket: bucket,
       Key: key,
-      Expires: 60 * 5, // 5mins
+      Expires: 60 * this.preSignedGetExpiresTimeInMinutes,
     };
     return this.s3.getSignedUrlPromise('getObject', params);
   }
@@ -18,7 +20,7 @@ export class S3Service {
     const params = {
       Bucket: bucket,
       Key: key,
-      Expires: 60 * 10, // 10mins
+      Expires: 60 * this.preSignedPutExpiresTimeInMinutes,
       ContentType: contentType,
     };
     return this.s3.getSignedUrlPromise('putObject', params);
