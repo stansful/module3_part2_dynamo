@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b765580a-9aa0-4b03-baac-96e80b00688c",
-		"name": "module3_part1",
+		"_postman_id": "a90be1d1-23f9-48a6-a4f3-bc670f867f65",
+		"name": "module3_part2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -67,7 +67,7 @@
 			"response": []
 		},
 		{
-			"name": "upload picture",
+			"name": "upload public picture",
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {}
 			},
@@ -105,9 +105,9 @@
 			"response": []
 		},
 		{
-			"name": "get preSigned upload link",
+			"name": "get preSigned upload private link",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [
 					{
 						"key": "Authorization",
@@ -115,6 +115,15 @@
 						"type": "default"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"metadata\": {\n        \"startMarker\": {\n            \"offset\": 0\n        },\n        \"tags\": {},\n        \"imageSize\": {\n            \"width\": 4000,\n            \"height\": 6000\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "{{dev}}gallery/upload",
 					"host": [
@@ -128,18 +137,18 @@
 			"response": []
 		},
 		{
-			"name": "upload pictures to the bucket",
+			"name": "upload private picture to the bucket",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "file",
 					"file": {
-						"src": "/home/seven/Downloads/hello-i-m-nik-Fjm3JkHiLhw-unsplash.jpeg"
+						"src": "/Users/philipp/Downloads/pexels-giulia-baptista-11483430.jpg"
 					}
 				},
 				"url": {
-					"raw": "https://image-bucket-uniq-uuid.s3.amazonaws.com/cca3caf3-9bf5-4586-95ec-0399f57c85da.jpeg?AWSAccessKeyId=ASIAQBHJIHFMRQRUSAHN&Content-Type=image%2Fjpeg&Expires=1651619410&Signature=GaPPGpdFDrzptUO2ygzQoDf9gFA%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEJ%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQDQ4KFsBsIBWxwUBFxCItAnWY2WW%2BC5KdL4XxTda%2FWOzgIgIAGThua3Mqw6EhHsS7XQ5Gt2eV%2BZXx%2BTYBJ0xryZUBkqvgIIaBAAGgwwMDI2MzY2NTkwMzMiDMrMm3nIQYBJIG1HVyqbAv2yNaMg5hlzdkSv%2BcK0pdoxfcm6Ge91bd1HwdSg08WHKItAt7rslB3Cn5LaLNHXXj24OMqGlM2cS%2FQ%2Bw67jfihjktWthKNHYHpW41IYukWzJkYaj3UZVt6b9ucMlepCG7PChGh359wFz%2F4nvhG9%2Bz0gbFUOnbMI6qMus%2B6rh3UHOI%2BaluTgJQ5R8Fyt%2BUjESvJEXgqOiwyahSADtx5GR8JRkDLbAZw%2FZQmewWwo2C5cYf%2Fo2iVGGELwebelsu6NylT3yzzZxVW9KIDsIG%2FxNy9oY42gSe5osYcM1SIaGIR9Ma2SheblAdyeTSNOhrPFRBzOc%2F1T0h%2BvQj2hfxdbVcXvQhKJAsjBgMPQkKMO8lvTeW2ELachXvaqrigw%2BOfGkwY6mwHPaseQ9WYZlUMijb%2BVoCZgIMShXeBJgGqzVYS%2FomhFwp1UvvPsh1CaRLmWeD4wmdVJ3o73pPsedXpYV5HEA9XCQl35HQRvfYgOj%2BjAys8nn4AhRrzcHPFh3wBpn4GW0cifVYDLE%2B5lHsKnwaabjvrvpsir9RukUPgF%2Fn%2B8ep7R3Dbz5BjCt%2BA6fd5v6KbOD4c%2BbGzfpikIrnQo3A%3D%3D",
+					"raw": "https://image-bucket-uniq-uuid.s3.amazonaws.com/53bac917-86fa-4702-a704-068f00515b61.jpeg?AWSAccessKeyId=ASIAQBHJIHFMYVYJYZNM&Content-Type=image%2Fjpeg&Expires=1651753136&Signature=3InPSlzKWCKFz8gBJe6mmoP9Iag%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEMX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDJkzYxtBTF3ywvKHYxuXftugtn3u23wUgUU58lXUW4oAIhANECmlDN9PDfMFy1r7ytkmNsweiD%2BBC73gdsvEc9f2vWKscCCI3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMDAyNjM2NjU5MDMzIgxXFb8AqtasxVPCaywqmwICBNmYcfxd1pX1mAO0qE6ymNLVTTkztkR1S5em%2F1FnH3%2BYsYpF%2FZgWMrVAzKtTe%2FZfblC25oPi5n3tAP5XjFm4XxN2K1B5s1EuHgByjgEuv5F%2B%2BRjZKNwpa%2FHA1xCwngZXsIqO6oxZCMrSvwy2%2BlZM%2FiCRfLAlInMJKxzv%2F6O61jOIv1rod%2FZ%2FgxjcURr1tZPUgr4qn3le%2BLEzPOcz9Dyrsm%2BocxSe5z4CPSe426ybDtgzr04%2FrnnNyGM8PmbES5ZDIrhUsYrRzuHP3Uc4aThRvcDjyaSSCEUPQd%2F5G%2Ftkck7tsV7RMqn%2B22O2brqU8zXnyipzg3uYDA0QHJY0eqGRZTft%2BXTrw4lFnagkPmR625wRv04IIdXWr80tMIb7zpMGOpoBlniWElKK3%2FLJXtKocHcF%2FYT025G%2FB%2FCetr8IREn0vtenXeerFWrwtjOW00y%2FLRBGMd8jS67%2FrtJ62mQiATXtSGro5s1L2s%2F33XzfbWtu75NeCQuycYOOz9KOgh0RK2PQUpFBL3hQvR3fXqv%2FWQTsH0UmDhoUkIPZLVEFz8pNJH5cYJmGiNzYaP3kwuejidvRtXed3YzM35m2iA%3D%3D",
 					"protocol": "https",
 					"host": [
 						"image-bucket-uniq-uuid",
@@ -148,12 +157,12 @@
 						"com"
 					],
 					"path": [
-						"cca3caf3-9bf5-4586-95ec-0399f57c85da.jpeg"
+						"53bac917-86fa-4702-a704-068f00515b61.jpeg"
 					],
 					"query": [
 						{
 							"key": "AWSAccessKeyId",
-							"value": "ASIAQBHJIHFMRQRUSAHN"
+							"value": "ASIAQBHJIHFMYVYJYZNM"
 						},
 						{
 							"key": "Content-Type",
@@ -161,15 +170,15 @@
 						},
 						{
 							"key": "Expires",
-							"value": "1651619410"
+							"value": "1651753136"
 						},
 						{
 							"key": "Signature",
-							"value": "GaPPGpdFDrzptUO2ygzQoDf9gFA%3D"
+							"value": "3InPSlzKWCKFz8gBJe6mmoP9Iag%3D"
 						},
 						{
 							"key": "x-amz-security-token",
-							"value": "IQoJb3JpZ2luX2VjEJ%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQDQ4KFsBsIBWxwUBFxCItAnWY2WW%2BC5KdL4XxTda%2FWOzgIgIAGThua3Mqw6EhHsS7XQ5Gt2eV%2BZXx%2BTYBJ0xryZUBkqvgIIaBAAGgwwMDI2MzY2NTkwMzMiDMrMm3nIQYBJIG1HVyqbAv2yNaMg5hlzdkSv%2BcK0pdoxfcm6Ge91bd1HwdSg08WHKItAt7rslB3Cn5LaLNHXXj24OMqGlM2cS%2FQ%2Bw67jfihjktWthKNHYHpW41IYukWzJkYaj3UZVt6b9ucMlepCG7PChGh359wFz%2F4nvhG9%2Bz0gbFUOnbMI6qMus%2B6rh3UHOI%2BaluTgJQ5R8Fyt%2BUjESvJEXgqOiwyahSADtx5GR8JRkDLbAZw%2FZQmewWwo2C5cYf%2Fo2iVGGELwebelsu6NylT3yzzZxVW9KIDsIG%2FxNy9oY42gSe5osYcM1SIaGIR9Ma2SheblAdyeTSNOhrPFRBzOc%2F1T0h%2BvQj2hfxdbVcXvQhKJAsjBgMPQkKMO8lvTeW2ELachXvaqrigw%2BOfGkwY6mwHPaseQ9WYZlUMijb%2BVoCZgIMShXeBJgGqzVYS%2FomhFwp1UvvPsh1CaRLmWeD4wmdVJ3o73pPsedXpYV5HEA9XCQl35HQRvfYgOj%2BjAys8nn4AhRrzcHPFh3wBpn4GW0cifVYDLE%2B5lHsKnwaabjvrvpsir9RukUPgF%2Fn%2B8ep7R3Dbz5BjCt%2BA6fd5v6KbOD4c%2BbGzfpikIrnQo3A%3D%3D"
+							"value": "IQoJb3JpZ2luX2VjEMX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDJkzYxtBTF3ywvKHYxuXftugtn3u23wUgUU58lXUW4oAIhANECmlDN9PDfMFy1r7ytkmNsweiD%2BBC73gdsvEc9f2vWKscCCI3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMDAyNjM2NjU5MDMzIgxXFb8AqtasxVPCaywqmwICBNmYcfxd1pX1mAO0qE6ymNLVTTkztkR1S5em%2F1FnH3%2BYsYpF%2FZgWMrVAzKtTe%2FZfblC25oPi5n3tAP5XjFm4XxN2K1B5s1EuHgByjgEuv5F%2B%2BRjZKNwpa%2FHA1xCwngZXsIqO6oxZCMrSvwy2%2BlZM%2FiCRfLAlInMJKxzv%2F6O61jOIv1rod%2FZ%2FgxjcURr1tZPUgr4qn3le%2BLEzPOcz9Dyrsm%2BocxSe5z4CPSe426ybDtgzr04%2FrnnNyGM8PmbES5ZDIrhUsYrRzuHP3Uc4aThRvcDjyaSSCEUPQd%2F5G%2Ftkck7tsV7RMqn%2B22O2brqU8zXnyipzg3uYDA0QHJY0eqGRZTft%2BXTrw4lFnagkPmR625wRv04IIdXWr80tMIb7zpMGOpoBlniWElKK3%2FLJXtKocHcF%2FYT025G%2FB%2FCetr8IREn0vtenXeerFWrwtjOW00y%2FLRBGMd8jS67%2FrtJ62mQiATXtSGro5s1L2s%2F33XzfbWtu75NeCQuycYOOz9KOgh0RK2PQUpFBL3hQvR3fXqv%2FWQTsH0UmDhoUkIPZLVEFz8pNJH5cYJmGiNzYaP3kwuejidvRtXed3YzM35m2iA%3D%3D"
 						}
 					]
 				}
@@ -227,40 +236,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "upload dev users",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{dev}}auth/fill",
-					"host": [
-						"{{dev}}auth"
-					],
-					"path": [
-						"fill"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "parse and upload images",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{dev}}gallery/fill",
-					"host": [
-						"{{dev}}gallery"
-					],
-					"path": [
-						"fill"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"event": [
@@ -291,7 +266,7 @@
 		},
 		{
 			"key": "dev",
-			"value": "https://41yzl6mgh2.execute-api.us-east-1.amazonaws.com/",
+			"value": "https://1lumgm9kw1.execute-api.us-east-1.amazonaws.com/",
 			"type": "default"
 		},
 		{
