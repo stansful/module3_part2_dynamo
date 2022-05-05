@@ -31,7 +31,7 @@ const previousButtonEvent = async () => {
   await showGallery();
 };
 
-const sendingFormEvent = async (event: Event) => {
+const sendingPublicPicture = async (event: Event) => {
   event.preventDefault();
   const picture = document.querySelector('#picture') as HTMLInputElement;
   if (!picture.files || !picture.files[0]) {
@@ -54,6 +54,10 @@ const sendingFormEvent = async (event: Event) => {
 };
 
 const checkPageLimitsAndBorders = async (data: Gallery[], page: string, filter: string) => {
+  if (Number(page) === 1 && !data.length) {
+    gallery.innerHTML = '<h2>Please upload pictures</h2>';
+    return;
+  }
   if (Number(page) === 1 && filter === 'true' && !data.length) {
     alert(UPLOADED_PICTURES_NOT_FOUND);
     setFilter();
@@ -77,8 +81,8 @@ const showGallery = async (page = getCurrentPage(), limit = getLimit(), filter =
 
   try {
     const data: Gallery[] = await apiRequest.get(`/gallery${query}`);
-    await checkPageLimitsAndBorders(data, page, filter);
     gallery.innerHTML = '';
+    await checkPageLimitsAndBorders(data, page, filter);
     data.forEach((imgLink) => (gallery.innerHTML += `<img src='${imgLink.path}' width='200' height='200' alt='img'>`));
   } catch (e) {
     console.log(e);
@@ -89,7 +93,7 @@ const redirectToIndex = () => {
   removeToken();
   nextButton.removeEventListener(EVENT_TYPES.click, nextButtonEvent);
   previousButton.removeEventListener(EVENT_TYPES.click, previousButtonEvent);
-  sendingForm.removeEventListener(EVENT_TYPES.submit, sendingFormEvent);
+  sendingForm.removeEventListener(EVENT_TYPES.submit, sendingPublicPicture);
   queryFilterButton.removeEventListener(EVENT_TYPES.click, queryFilterButtonEvent);
   return document.location.replace('./index.html');
 };
@@ -104,5 +108,5 @@ showGallery();
 
 nextButton.addEventListener(EVENT_TYPES.click, nextButtonEvent);
 previousButton.addEventListener(EVENT_TYPES.click, previousButtonEvent);
-sendingForm.addEventListener(EVENT_TYPES.submit, sendingFormEvent);
+sendingForm.addEventListener(EVENT_TYPES.submit, sendingPublicPicture);
 queryFilterButton.addEventListener(EVENT_TYPES.click, queryFilterButtonEvent);

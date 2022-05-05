@@ -76,3 +76,11 @@ body {
 #sending-form {
     margin-bottom: 10px;
 }
+
+#sending-private-picture {
+    justify-content: right;
+}
+
+#queryFilter {
+    margin-right: 43px;
+}
