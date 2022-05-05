@@ -2,7 +2,6 @@ import type { AWS } from '@serverless/typescript';
 import { imageBucketConfig } from './config/serverless/buckets/image.bucket';
 import { authConfig } from './config/serverless/parts/auth';
 import { galleryConfig } from './config/serverless/parts/gallery';
-import { restApiCorsConfig } from './config/serverless/parts/rest-api-cors';
 import { usersTableConfig } from './config/serverless/tables/users.table';
 import { joinParts } from './config/serverless/utils';
 
@@ -81,10 +80,4 @@ const masterConfig: AWS = {
   ],
 };
 
-module.exports = joinParts(masterConfig, [
-  restApiCorsConfig,
-  authConfig,
-  galleryConfig,
-  usersTableConfig,
-  imageBucketConfig,
-]);
+module.exports = joinParts(masterConfig, [authConfig, galleryConfig, usersTableConfig, imageBucketConfig]);

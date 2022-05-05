@@ -86,10 +86,10 @@ export const usersTableConfig: AWSPartitial = {
   custom: {
     tablesNames: {
       UsersTable: {
-        local: 'Users-local',
-        dev: 'Users-dev',
-        test: 'Users-test',
-        prod: 'Users',
+        local: 'stansful-Users-local',
+        dev: 'stansful-Users-dev',
+        test: 'stansful-Users-test',
+        prod: 'stansful-Users',
       },
     },
   },

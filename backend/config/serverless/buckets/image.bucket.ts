@@ -19,10 +19,19 @@ export const imageBucketConfig: AWSPartitial = {
   },
   resources: {
     Resources: {
-      MyBucket: {
+      S3ImageBucket: {
         Type: 'AWS::S3::Bucket',
         Properties: {
           BucketName: '${file(env.yml):${self:provider.stage}.BUCKET}',
+          CorsConfiguration: {
+            CorsRules: [
+              {
+                AllowedHeaders: ['*'],
+                AllowedOrigins: ['*'],
+                AllowedMethods: ['PUT'],
+              },
+            ],
+          },
         },
       },
     },
