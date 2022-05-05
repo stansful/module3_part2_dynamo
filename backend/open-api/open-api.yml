@@ -93,33 +93,7 @@ paths:
                     example: 400
                   message:
                     type: string
-  /auth/fill:
-    get:
-      tags:
-        - Auth
-      summary: upload dev users to db
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 400
-                  message:
-                    type: string
+
 
   /gallery:
     get:
@@ -253,23 +227,43 @@ paths:
                   message:
                     type: string
 
-  /gallery/fill:
-    get:
+    /gallery/upload:
+    put:
       tags:
-        - Gallery
-      summary: parse & upload existing images to db
+        - Gallery/upload
+      summary: get upload link and picture key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - metadata
+              properties:
+                metadata:
+                  description: picture metadata
+                  type: object
+                  example: { width: 200, height: 200, fileSize: 9515236, fileExtension: 'jpg' }
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: token
       responses:
-        '201':
-          description: Created
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  key:
                     type: string
-        '400':
-          description: Bad Request
+                  uploadUrl:
+                    type: string
+        '401':
+          description: Not Authorized
           content:
             application/json:
               schema:
@@ -277,6 +271,6 @@ paths:
                 properties:
                   status:
                     type: number
-                    example: 400
+                    example: 401
                   message:
                     type: string
