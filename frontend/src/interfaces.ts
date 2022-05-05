@@ -12,6 +12,11 @@ interface Gallery {
   path: string;
 }
 
+interface UploadMessage {
+  key: string;
+  uploadUrl: string;
+}
+
 interface ErrorMessage {
   errorMessage: string;
 }

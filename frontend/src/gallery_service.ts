@@ -4,6 +4,7 @@ const nextButton = document.querySelector('#next') as HTMLButtonElement;
 const sendingForm = document.querySelector('#sending-form') as HTMLFormElement;
 const sendingFormSubmitInput = document.querySelector('#sending-form-submit') as HTMLInputElement;
 const queryFilterButton = document.querySelector('#queryFilter') as HTMLInputElement;
+const sendingPrivatePictureButton = document.querySelector('#sending-private-picture') as HTMLInputElement;
 
 const updateQueryParams = (pageNumber: string, limit: string, filter: string) => {
   if (location.search !== `?page=${pageNumber}&limit=${limit}&filter=${filter}`) {
@@ -53,6 +54,42 @@ const sendingPublicPicture = async (event: Event) => {
   await showGallery();
 };
 
+const uploadPrivatePicture = async (event: Event) => {
+  event.preventDefault();
+  const picture = document.querySelector('#picture') as HTMLInputElement;
+  if (!picture.files || !picture.files[0]) {
+    return alert('Please choose file to upload');
+  }
+
+  sendingPrivatePictureButton.disabled = true;
+  try {
+    const metadata = await getImageMeta(picture.files[0]);
+    console.log(metadata);
+    if (!metadata) {
+      sendingPrivatePictureButton.disabled = false;
+      return alert('No metadata found =(');
+    }
+
+    const response: UploadMessage = await apiRequest.post(`/gallery/upload`, { metadata });
+    console.log(response);
+    const formData = new FormData();
+    formData.append('picture', picture.files[0]);
+
+    await fetch(response.uploadUrl, {
+      method: 'PUT',
+      body: formData,
+    });
+  } catch (error) {
+    console.log(error);
+    return alert('Upload failed');
+  }
+  sendingPrivatePictureButton.disabled = false;
+
+  alert('Image successfully uploaded');
+
+  await showGallery();
+};
+
 const checkPageLimitsAndBorders = async (data: Gallery[], page: string, filter: string) => {
   if (Number(page) === 1 && !data.length) {
     gallery.innerHTML = '<h2>Please upload pictures</h2>';
@@ -95,6 +132,7 @@ const redirectToIndex = () => {
   previousButton.removeEventListener(EVENT_TYPES.click, previousButtonEvent);
   sendingForm.removeEventListener(EVENT_TYPES.submit, sendingPublicPicture);
   queryFilterButton.removeEventListener(EVENT_TYPES.click, queryFilterButtonEvent);
+  sendingPrivatePictureButton.removeEventListener(EVENT_TYPES.click, uploadPrivatePicture);
   return document.location.replace('./index.html');
 };
 
@@ -110,3 +148,4 @@ nextButton.addEventListener(EVENT_TYPES.click, nextButtonEvent);
 previousButton.addEventListener(EVENT_TYPES.click, previousButtonEvent);
 sendingForm.addEventListener(EVENT_TYPES.submit, sendingPublicPicture);
 queryFilterButton.addEventListener(EVENT_TYPES.click, queryFilterButtonEvent);
+sendingPrivatePictureButton.addEventListener(EVENT_TYPES.click, uploadPrivatePicture);
