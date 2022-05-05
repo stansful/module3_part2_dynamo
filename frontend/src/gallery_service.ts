@@ -2,7 +2,7 @@ const gallery = document.querySelector('#gallery') as HTMLElement;
 const previousButton = document.querySelector('#previous') as HTMLButtonElement;
 const nextButton = document.querySelector('#next') as HTMLButtonElement;
 const sendingForm = document.querySelector('#sending-form') as HTMLFormElement;
-const sendingFormSubmitInput = document.querySelector('#sending-form-submit') as HTMLInputElement;
+const sendingPublicPictureButton = document.querySelector('#sending-public-picture') as HTMLInputElement;
 const queryFilterButton = document.querySelector('#queryFilter') as HTMLInputElement;
 const sendingPrivatePictureButton = document.querySelector('#sending-private-picture') as HTMLInputElement;
 
@@ -42,13 +42,13 @@ const sendingPublicPicture = async (event: Event) => {
   const formData = new FormData();
   formData.append('picture', picture.files[0]);
 
-  sendingFormSubmitInput.disabled = true;
+  sendingPublicPictureButton.disabled = true;
   try {
     await apiRequest.post(`/gallery`, formData, getToken());
   } catch (error) {
     return alert('Upload failed');
   }
-  sendingFormSubmitInput.disabled = false;
+  sendingPublicPictureButton.disabled = false;
   alert('Image successfully uploaded');
 
   await showGallery();

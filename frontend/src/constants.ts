@@ -1,4 +1,4 @@
-const API_URL = 'https://41yzl6mgh2.execute-api.us-east-1.amazonaws.com';
+const API_URL = 'https://1lumgm9kw1.execute-api.us-east-1.amazonaws.com';
 const PAGE_DOES_NOT_EXIST = 'Page doesnt exist, we set page to 1';
 const VALIDATION_FAILED = 'Please re-enter password & username';
 const UPLOADED_PICTURES_NOT_FOUND = 'Uploaded pictures not found';
