@@ -64,23 +64,14 @@ const uploadPrivatePicture = async (event: Event) => {
   sendingPrivatePictureButton.disabled = true;
   try {
     const metadata = await getImageMeta(picture.files[0]);
-    console.log(metadata);
-    if (!metadata) {
-      sendingPrivatePictureButton.disabled = false;
-      return alert('No metadata found =(');
-    }
 
     const response: UploadMessage = await apiRequest.post(`/gallery/upload`, { metadata });
-    console.log(response);
-    const formData = new FormData();
-    formData.append('picture', picture.files[0]);
 
     await fetch(response.uploadUrl, {
       method: 'PUT',
-      body: formData,
+      body: picture.files[0],
     });
   } catch (error) {
-    console.log(error);
     return alert('Upload failed');
   }
   sendingPrivatePictureButton.disabled = false;
