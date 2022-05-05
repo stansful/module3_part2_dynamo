@@ -65,7 +65,7 @@ npm run lint
 
 ## Issues
 
-If you find any [issue](https://github.com/stansful/module2_part3_express/issues), please submit it.
+If you find any [issue](https://github.com/stansful/module3_part2_dynamo/issues), please submit it.
 
 ## Stay in touch
 

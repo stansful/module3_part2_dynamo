@@ -16,23 +16,15 @@ npm install
 local: kms-super-secret-key
 ```
 
-3. Deploy local
+3. Deploy dev
 
 ```
-npm run deploy:local:auth
-```
-
-4. Send 2 get requests using postman, to create dev user and image entities
-
-```
-http://localhost:XXXX/auth/fill
-    &
-http://localhost:XXXX/gallery/fill
+npm run deploy:dev
 ```
 
 ## Issues
 
-If you find any [issue](https://github.com/stansful/module3_part1_serverless/issues), please submit it.
+If you find any [issue](https://github.com/stansful/module3_part2_dynamo/issues), please submit it.
 
 ## Stay in touch
 
