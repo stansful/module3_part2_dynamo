@@ -259,7 +259,7 @@ paths:
         - Gallery
       summary: parse & upload existing images to db
       responses:
-        '201':
+        '200':
           description: Created
           content:
             application/json:
