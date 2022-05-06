@@ -9,3 +9,15 @@ export interface SanitizedQueryParams {
   skip: number;
   uploadedByUser: boolean;
 }
+
+export interface Metadata {
+  width: number;
+  height: number;
+  fileSize: number;
+  fileExtension: string;
+}
+
+export interface PreSignedUploadResponse {
+  key: string;
+  uploadUrl: string;
+}

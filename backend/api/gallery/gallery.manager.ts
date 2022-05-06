@@ -1,5 +1,4 @@
 import { HttpBadRequestError } from '@floteam/errors';
-import { MultipartRequest } from 'lambda-multipart-parser';
 import { RequestGalleryQueryParams } from './gallery.interfaces';
 import { GalleryService } from './gallery.service';
 
@@ -15,18 +14,19 @@ export class GalleryManager {
     return this.galleryService.getPictures(sanitizedQuery, email);
   }
 
-  public uploadPicture(pictures: MultipartRequest) {
-    if (!pictures.files.length) {
-      throw new HttpBadRequestError('File missing');
+  public uploadPicture(body?: string) {
+    if (!body) {
+      throw new HttpBadRequestError('Please, provide picture metadata');
     }
 
-    const picture = pictures.files[0];
+    try {
+      const parsedBody = JSON.parse(body);
+      const metadata = parsedBody?.metadata;
 
-    if (picture.contentType !== 'image/jpeg') {
-      throw new HttpBadRequestError('Unfortunately we support only jpeg');
+      return this.galleryService.uploadPicture(metadata);
+    } catch (error) {
+      throw new HttpBadRequestError('Invalid body');
     }
-
-    return this.galleryService.uploadPicture(picture);
   }
 
   public getPreSignedUploadLink(email: string, body?: string) {
@@ -34,14 +34,14 @@ export class GalleryManager {
       throw new HttpBadRequestError('Please, provide picture metadata');
     }
 
-    const parsedBody = JSON.parse(body);
-    const metadata = parsedBody?.metadata;
+    try {
+      const parsedBody = JSON.parse(body);
+      const metadata = parsedBody?.metadata;
 
-    if (!metadata) {
-      throw new HttpBadRequestError('Please, provide picture metadata');
+      return this.galleryService.getPreSignedUploadLink(email, metadata);
+    } catch (error) {
+      throw new HttpBadRequestError('Invalid body');
     }
-
-    return this.galleryService.getPreSignedUploadLink(email, metadata);
   }
 
   public updateImageStatus(imageName: string) {

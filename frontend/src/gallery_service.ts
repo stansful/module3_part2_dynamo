@@ -39,16 +39,20 @@ const sendingPublicPicture = async (event: Event) => {
     return alert('Please choose file to upload');
   }
 
-  const formData = new FormData();
-  formData.append('picture', picture.files[0]);
-
   sendingPublicPictureButton.disabled = true;
   try {
-    await apiRequest.post(`/gallery`, formData, getToken());
+    const metadata = await getImageMeta(picture.files[0]);
+
+    const response: UploadMessage = await apiRequest.post(`/gallery`, { metadata });
+    await fetch(response.uploadUrl, {
+      method: 'PUT',
+      body: picture.files[0],
+    });
   } catch (error) {
     return alert('Upload failed');
   }
   sendingPublicPictureButton.disabled = false;
+
   alert('Image successfully uploaded');
 
   await showGallery();

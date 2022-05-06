@@ -4,7 +4,6 @@ import { log } from '@helper/logger';
 import { APIGatewayProxyHandlerV2, APIGatewayProxyWithLambdaAuthorizerHandler, S3Handler } from 'aws-lambda';
 import { RequestGalleryQueryParams } from './gallery.interfaces';
 import { GalleryManager } from './gallery.manager';
-import multipartParser from 'lambda-multipart-parser';
 
 const galleryManager = new GalleryManager();
 
@@ -34,16 +33,10 @@ export const uploadPicture: APIGatewayProxyHandlerV2 = async (event) => {
   log(event);
   try {
     // @ts-ignore
-    const pictures = await multipartParser.parse(event);
+    const response = await galleryManager.uploadPicture(event.body);
 
-    const response = await galleryManager.uploadPicture(pictures);
-
-    return createResponse(201, response);
+    return createResponse(200, response);
   } catch (error) {
-    if (error.message === 'Missing Content-Type') {
-      return createResponse(400, { message: 'Please, provide content type' });
-    }
-
     return errorHandler(error);
   }
 };

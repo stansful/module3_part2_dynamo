@@ -1,14 +1,15 @@
 import { HttpBadRequestError, HttpInternalServerError } from '@floteam/errors';
 import { getEnv } from '@helper/environment';
-import { ResponseMessage } from '@interfaces/response-message.interface';
 import { DynamoUserImage, ImageService } from '@services/dynamoDB/entities/image.service';
 import { S3Service } from '@services/s3.service';
 import { UserService } from '@services/dynamoDB/entities/user.service';
-import { ExifData } from 'ts-exif-parser';
 import * as uuid from 'uuid';
-import { MultipartFile } from 'lambda-multipart-parser';
-import { MetaDataService } from '@services/meta-data.service';
-import { RequestGalleryQueryParams, SanitizedQueryParams } from './gallery.interfaces';
+import {
+  Metadata,
+  PreSignedUploadResponse,
+  RequestGalleryQueryParams,
+  SanitizedQueryParams,
+} from './gallery.interfaces';
 
 export class GalleryService {
   private readonly imageService = new ImageService();
@@ -71,29 +72,32 @@ export class GalleryService {
     }
   }
 
-  public async uploadPicture(picture: MultipartFile): Promise<ResponseMessage> {
-    const newPictureName = picture.filename.toLowerCase();
+  public async uploadPicture(metadata: Metadata): Promise<PreSignedUploadResponse> {
+    const generatedImageName = (uuid.v4() + '.jpeg').toLowerCase();
 
     try {
-      const metadata = await MetaDataService.getExifMetadata(picture.content);
+      await this.imageService.create({ name: generatedImageName, metadata, status: 'Pending' });
 
-      await this.s3Service.put(newPictureName, picture.content, this.imageBucket);
-      await this.imageService.create({ name: newPictureName, metadata, status: 'Pending' });
+      const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
 
-      return { message: 'Picture uploaded' };
+      return { key: generatedImageName, uploadUrl };
     } catch (error) {
       throw new HttpBadRequestError('Default pictures already exist');
     }
   }
 
-  public async getPreSignedUploadLink(email: string, metadata: ExifData) {
+  public async getPreSignedUploadLink(email: string, metadata: Metadata): Promise<PreSignedUploadResponse> {
     const generatedImageName = (uuid.v4() + '.jpeg').toLowerCase();
 
-    await this.imageService.create({ name: generatedImageName, metadata, status: 'Pending' }, email);
+    try {
+      await this.imageService.create({ name: generatedImageName, metadata, status: 'Pending' }, email);
 
-    const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
+      const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
 
-    return { key: generatedImageName, uploadUrl };
+      return { key: generatedImageName, uploadUrl };
+    } catch (e) {
+      throw new HttpBadRequestError('Picture already exist');
+    }
   }
 
   public async updateImageStatus(imageName: string) {
