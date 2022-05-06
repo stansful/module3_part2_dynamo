@@ -18,6 +18,16 @@ export class GalleryService {
   private readonly imageBucket = getEnv('BUCKET');
   private readonly pictureLimit = getEnv('DEFAULT_PICTURE_LIMIT');
 
+  private async generatePreSignedUploadResponse(metadata: Metadata, email?: string): Promise<PreSignedUploadResponse> {
+    const generatedImageName = (uuid.v4() + '.jpeg').toLowerCase();
+
+    await this.imageService.create({ name: generatedImageName, metadata, status: 'Pending' }, email);
+
+    const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
+
+    return { key: generatedImageName, uploadUrl };
+  }
+
   private parseQueryParam(defaultValue: number, num?: string): number {
     if (!num) {
       return defaultValue;
@@ -73,29 +83,17 @@ export class GalleryService {
   }
 
   public async uploadPicture(metadata: Metadata): Promise<PreSignedUploadResponse> {
-    const generatedImageName = (uuid.v4() + '.jpeg').toLowerCase();
-
     try {
-      await this.imageService.create({ name: generatedImageName, metadata, status: 'Pending' });
-
-      const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
-
-      return { key: generatedImageName, uploadUrl };
+      return this.generatePreSignedUploadResponse(metadata);
     } catch (error) {
-      throw new HttpBadRequestError('Default pictures already exist');
+      throw new HttpBadRequestError('Default picture already exist');
     }
   }
 
   public async getPreSignedUploadLink(email: string, metadata: Metadata): Promise<PreSignedUploadResponse> {
-    const generatedImageName = (uuid.v4() + '.jpeg').toLowerCase();
-
     try {
-      await this.imageService.create({ name: generatedImageName, metadata, status: 'Pending' }, email);
-
-      const uploadUrl = await this.s3Service.getPreSignedPutUrl(generatedImageName, this.imageBucket);
-
-      return { key: generatedImageName, uploadUrl };
-    } catch (e) {
+      return this.generatePreSignedUploadResponse(metadata, email);
+    } catch (error) {
       throw new HttpBadRequestError('Picture already exist');
     }
   }

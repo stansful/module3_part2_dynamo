@@ -32,58 +32,36 @@ const previousButtonEvent = async () => {
   await showGallery();
 };
 
-const sendingPublicPicture = async (event: Event) => {
-  event.preventDefault();
-  const picture = document.querySelector('#picture') as HTMLInputElement;
-  if (!picture.files || !picture.files[0]) {
-    return alert('Please choose file to upload');
-  }
+const createUploadPictureFactory = (button: HTMLInputElement, path: string) => {
+  return async (event: Event) => {
+    event.preventDefault();
+    const picture = document.querySelector('#picture') as HTMLInputElement;
+    if (!picture.files || !picture.files[0]) {
+      return alert('Please choose file to upload');
+    }
 
-  sendingPublicPictureButton.disabled = true;
-  try {
-    const metadata = await getImageMeta(picture.files[0]);
+    button.disabled = true;
+    try {
+      const metadata = await getImageMeta(picture.files[0]);
 
-    const response: UploadMessage = await apiRequest.post(`/gallery`, { metadata });
-    await fetch(response.uploadUrl, {
-      method: 'PUT',
-      body: picture.files[0],
-    });
-  } catch (error) {
-    return alert('Upload failed');
-  }
-  sendingPublicPictureButton.disabled = false;
+      const response: UploadMessage = await apiRequest.post(path, { metadata });
+      await fetch(response.uploadUrl, {
+        method: 'PUT',
+        body: picture.files[0],
+      });
+    } catch (error) {
+      return alert('Upload failed');
+    }
+    button.disabled = false;
 
-  alert('Image successfully uploaded');
+    alert('Image successfully uploaded');
 
-  await showGallery();
+    await showGallery();
+  };
 };
 
-const uploadPrivatePicture = async (event: Event) => {
-  event.preventDefault();
-  const picture = document.querySelector('#picture') as HTMLInputElement;
-  if (!picture.files || !picture.files[0]) {
-    return alert('Please choose file to upload');
-  }
-
-  sendingPrivatePictureButton.disabled = true;
-  try {
-    const metadata = await getImageMeta(picture.files[0]);
-
-    const response: UploadMessage = await apiRequest.post(`/gallery/upload`, { metadata });
-
-    await fetch(response.uploadUrl, {
-      method: 'PUT',
-      body: picture.files[0],
-    });
-  } catch (error) {
-    return alert('Upload failed');
-  }
-  sendingPrivatePictureButton.disabled = false;
-
-  alert('Image successfully uploaded');
-
-  await showGallery();
-};
+const uploadPublicPicture = createUploadPictureFactory(sendingPublicPictureButton, '/gallery');
+const uploadPrivatePicture = createUploadPictureFactory(sendingPrivatePictureButton, '/gallery/upload');
 
 const checkPageLimitsAndBorders = async (data: Gallery[], page: string, filter: string) => {
   if (Number(page) === 1 && !data.length) {
@@ -125,7 +103,7 @@ const redirectToIndex = () => {
   removeToken();
   nextButton.removeEventListener(EVENT_TYPES.click, nextButtonEvent);
   previousButton.removeEventListener(EVENT_TYPES.click, previousButtonEvent);
-  sendingForm.removeEventListener(EVENT_TYPES.submit, sendingPublicPicture);
+  sendingForm.removeEventListener(EVENT_TYPES.submit, uploadPublicPicture);
   queryFilterButton.removeEventListener(EVENT_TYPES.click, queryFilterButtonEvent);
   sendingPrivatePictureButton.removeEventListener(EVENT_TYPES.click, uploadPrivatePicture);
   return document.location.replace('./index.html');
@@ -141,6 +119,6 @@ showGallery();
 
 nextButton.addEventListener(EVENT_TYPES.click, nextButtonEvent);
 previousButton.addEventListener(EVENT_TYPES.click, previousButtonEvent);
-sendingForm.addEventListener(EVENT_TYPES.submit, sendingPublicPicture);
+sendingForm.addEventListener(EVENT_TYPES.submit, uploadPublicPicture);
 queryFilterButton.addEventListener(EVENT_TYPES.click, queryFilterButtonEvent);
 sendingPrivatePictureButton.addEventListener(EVENT_TYPES.click, uploadPrivatePicture);
