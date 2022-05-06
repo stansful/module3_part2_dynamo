@@ -24,3 +24,10 @@ interface ErrorMessage {
 interface Message {
   message: string;
 }
+
+interface Metadata {
+  width: number;
+  height: number;
+  fileSize: number;
+  fileExtension: string;
+}

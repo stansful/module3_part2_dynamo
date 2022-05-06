@@ -1,11 +1,4 @@
-const getImageMeta = async (
-  file: File,
-): Promise<{
-  width: number;
-  height: number;
-  fileSize: number;
-  fileExtension: string;
-}> => {
+const getImageMeta = async (file: File): Promise<Metadata> => {
   const { name } = file;
   const fileExtension = name.split('.').pop();
 
