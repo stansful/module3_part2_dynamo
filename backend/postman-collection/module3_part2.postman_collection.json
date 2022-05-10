@@ -67,7 +67,7 @@
 			"response": []
 		},
 		{
-			"name": "upload public picture",
+			"name": "get preSigned upload public link",
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {}
 			},
@@ -81,14 +81,8 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "picture",
-							"type": "file",
-							"src": "/home/seven/Downloads/lion.jpeg"
-						}
-					],
+					"mode": "raw",
+					"raw": "{\n    \"metadata\": {\n        \"width\": 1920,\n        \"height\": 1080,\n        \"fileSize\": 1000,\n        \"fileExtension\": \"jpeg\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -117,7 +111,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"metadata\": {\n        \"startMarker\": {\n            \"offset\": 0\n        },\n        \"tags\": {},\n        \"imageSize\": {\n            \"width\": 4000,\n            \"height\": 6000\n        }\n    }\n}",
+					"raw": "{\n    \"metadata\": {\n        \"width\": 1920,\n        \"height\": 1080,\n        \"fileSize\": 1000,\n        \"fileExtension\": \"jpeg\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -137,7 +131,7 @@
 			"response": []
 		},
 		{
-			"name": "upload private picture to the bucket",
+			"name": "upload private/public picture to the bucket",
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -148,7 +142,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://image-bucket-uniq-uuid.s3.amazonaws.com/53bac917-86fa-4702-a704-068f00515b61.jpeg?AWSAccessKeyId=ASIAQBHJIHFMYVYJYZNM&Content-Type=image%2Fjpeg&Expires=1651753136&Signature=3InPSlzKWCKFz8gBJe6mmoP9Iag%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEMX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDJkzYxtBTF3ywvKHYxuXftugtn3u23wUgUU58lXUW4oAIhANECmlDN9PDfMFy1r7ytkmNsweiD%2BBC73gdsvEc9f2vWKscCCI3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMDAyNjM2NjU5MDMzIgxXFb8AqtasxVPCaywqmwICBNmYcfxd1pX1mAO0qE6ymNLVTTkztkR1S5em%2F1FnH3%2BYsYpF%2FZgWMrVAzKtTe%2FZfblC25oPi5n3tAP5XjFm4XxN2K1B5s1EuHgByjgEuv5F%2B%2BRjZKNwpa%2FHA1xCwngZXsIqO6oxZCMrSvwy2%2BlZM%2FiCRfLAlInMJKxzv%2F6O61jOIv1rod%2FZ%2FgxjcURr1tZPUgr4qn3le%2BLEzPOcz9Dyrsm%2BocxSe5z4CPSe426ybDtgzr04%2FrnnNyGM8PmbES5ZDIrhUsYrRzuHP3Uc4aThRvcDjyaSSCEUPQd%2F5G%2Ftkck7tsV7RMqn%2B22O2brqU8zXnyipzg3uYDA0QHJY0eqGRZTft%2BXTrw4lFnagkPmR625wRv04IIdXWr80tMIb7zpMGOpoBlniWElKK3%2FLJXtKocHcF%2FYT025G%2FB%2FCetr8IREn0vtenXeerFWrwtjOW00y%2FLRBGMd8jS67%2FrtJ62mQiATXtSGro5s1L2s%2F33XzfbWtu75NeCQuycYOOz9KOgh0RK2PQUpFBL3hQvR3fXqv%2FWQTsH0UmDhoUkIPZLVEFz8pNJH5cYJmGiNzYaP3kwuejidvRtXed3YzM35m2iA%3D%3D",
+					"raw": "https://image-bucket-uniq-uuid.s3.amazonaws.com/67ae2a5e-a7bc-4f1b-99e2-9ca13771f1f5.jpeg?AWSAccessKeyId=ASIAQBHJIHFMSCLAL6G3&Content-Type=image%2Fjpeg&Expires=1651758556&Signature=nPZfUpIOHkXz7wEdwzPWnbUQJHI%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEMb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJGMEQCIHPiyabSr3utZBrz1owq7YMs69JHD40wN9y3P9AyapeFAiB1HhVr%2BEtGAUxWvhiB5j9DNeBs2rp3hKMeP3QipvGRgCrHAgiP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDAwMjYzNjY1OTAzMyIMlds2Crlp942qP13sKpsCzmjuK5M%2BhaVhe0TcJxpA6wqGoLcG33aQyDKD1Axu73tXlIsNrQ%2FtRkSHYAd3ew3x10cFrzgXfmSH85NhoZL0zvf7O5%2BRg1lM7XCDkKjv2Da4QsxsB%2BTvXWKckMeNtwF9prGnX415uvJ%2BjvlKEKgocBtRABFcgNR%2B4Gh%2BlYE6uDQNjf0PM1LLaEYBhEZ0Ke9utmMAYpsSZd0j7Z3sb%2B5PgAR2mrkLdC9rV%2F1zMi4EUvdqhbTo3KM2xw8UzwF8pFp0FAKyRKLJzZxK9UJGQmOMemGrq4r7CA6DfwHowlhYyLv9IZP5oe%2Fj4uU17UVsYkXVaHDEWxGFsR4TgBF1BeZW4NwsTDrvbUjvWaslU3xc2%2FHqHjmn%2Bu4ZW6VzrDCuqc%2BTBjqcAdJ%2FTbB%2F7Z2HtAVpJkbCaon%2F9xkgSZiaZMxLwuqi3YWyL9HsytQRxUGM1rnfmRvqz%2F6qqt%2F61vX56lEA92rvjCIpKrspl3Zmyf%2B8OfP5yTlvM5iRx7gXdwRoiGwqmpB41GVSe3Hg%2F%2F7VHT%2FJRBpFIxOZEwwTgXXh%2FezMAj0oHesJ3HnVk4xB76bl4w3PJ8F6vda8JGDc941EABKJ6Q%3D%3D",
 					"protocol": "https",
 					"host": [
 						"image-bucket-uniq-uuid",
@@ -157,12 +151,12 @@
 						"com"
 					],
 					"path": [
-						"53bac917-86fa-4702-a704-068f00515b61.jpeg"
+						"67ae2a5e-a7bc-4f1b-99e2-9ca13771f1f5.jpeg"
 					],
 					"query": [
 						{
 							"key": "AWSAccessKeyId",
-							"value": "ASIAQBHJIHFMYVYJYZNM"
+							"value": "ASIAQBHJIHFMSCLAL6G3"
 						},
 						{
 							"key": "Content-Type",
@@ -170,15 +164,15 @@
 						},
 						{
 							"key": "Expires",
-							"value": "1651753136"
+							"value": "1651758556"
 						},
 						{
 							"key": "Signature",
-							"value": "3InPSlzKWCKFz8gBJe6mmoP9Iag%3D"
+							"value": "nPZfUpIOHkXz7wEdwzPWnbUQJHI%3D"
 						},
 						{
 							"key": "x-amz-security-token",
-							"value": "IQoJb3JpZ2luX2VjEMX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDJkzYxtBTF3ywvKHYxuXftugtn3u23wUgUU58lXUW4oAIhANECmlDN9PDfMFy1r7ytkmNsweiD%2BBC73gdsvEc9f2vWKscCCI3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMMDAyNjM2NjU5MDMzIgxXFb8AqtasxVPCaywqmwICBNmYcfxd1pX1mAO0qE6ymNLVTTkztkR1S5em%2F1FnH3%2BYsYpF%2FZgWMrVAzKtTe%2FZfblC25oPi5n3tAP5XjFm4XxN2K1B5s1EuHgByjgEuv5F%2B%2BRjZKNwpa%2FHA1xCwngZXsIqO6oxZCMrSvwy2%2BlZM%2FiCRfLAlInMJKxzv%2F6O61jOIv1rod%2FZ%2FgxjcURr1tZPUgr4qn3le%2BLEzPOcz9Dyrsm%2BocxSe5z4CPSe426ybDtgzr04%2FrnnNyGM8PmbES5ZDIrhUsYrRzuHP3Uc4aThRvcDjyaSSCEUPQd%2F5G%2Ftkck7tsV7RMqn%2B22O2brqU8zXnyipzg3uYDA0QHJY0eqGRZTft%2BXTrw4lFnagkPmR625wRv04IIdXWr80tMIb7zpMGOpoBlniWElKK3%2FLJXtKocHcF%2FYT025G%2FB%2FCetr8IREn0vtenXeerFWrwtjOW00y%2FLRBGMd8jS67%2FrtJ62mQiATXtSGro5s1L2s%2F33XzfbWtu75NeCQuycYOOz9KOgh0RK2PQUpFBL3hQvR3fXqv%2FWQTsH0UmDhoUkIPZLVEFz8pNJH5cYJmGiNzYaP3kwuejidvRtXed3YzM35m2iA%3D%3D"
+							"value": "IQoJb3JpZ2luX2VjEMb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJGMEQCIHPiyabSr3utZBrz1owq7YMs69JHD40wN9y3P9AyapeFAiB1HhVr%2BEtGAUxWvhiB5j9DNeBs2rp3hKMeP3QipvGRgCrHAgiP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDAwMjYzNjY1OTAzMyIMlds2Crlp942qP13sKpsCzmjuK5M%2BhaVhe0TcJxpA6wqGoLcG33aQyDKD1Axu73tXlIsNrQ%2FtRkSHYAd3ew3x10cFrzgXfmSH85NhoZL0zvf7O5%2BRg1lM7XCDkKjv2Da4QsxsB%2BTvXWKckMeNtwF9prGnX415uvJ%2BjvlKEKgocBtRABFcgNR%2B4Gh%2BlYE6uDQNjf0PM1LLaEYBhEZ0Ke9utmMAYpsSZd0j7Z3sb%2B5PgAR2mrkLdC9rV%2F1zMi4EUvdqhbTo3KM2xw8UzwF8pFp0FAKyRKLJzZxK9UJGQmOMemGrq4r7CA6DfwHowlhYyLv9IZP5oe%2Fj4uU17UVsYkXVaHDEWxGFsR4TgBF1BeZW4NwsTDrvbUjvWaslU3xc2%2FHqHjmn%2Bu4ZW6VzrDCuqc%2BTBjqcAdJ%2FTbB%2F7Z2HtAVpJkbCaon%2F9xkgSZiaZMxLwuqi3YWyL9HsytQRxUGM1rnfmRvqz%2F6qqt%2F61vX56lEA92rvjCIpKrspl3Zmyf%2B8OfP5yTlvM5iRx7gXdwRoiGwqmpB41GVSe3Hg%2F%2F7VHT%2FJRBpFIxOZEwwTgXXh%2FezMAj0oHesJ3HnVk4xB76bl4w3PJ8F6vda8JGDc941EABKJ6Q%3D%3D"
 						}
 					]
 				}

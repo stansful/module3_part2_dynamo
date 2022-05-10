@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: Dev server
-    url: http://localhost:3000
+    url: https://1lumgm9kw1.execute-api.us-east-1.amazonaws.com/
 info:
   version: "1.0.0"
   title: Client project API Documentation
@@ -173,16 +173,19 @@ paths:
     post:
       tags:
         - Gallery
-      summary: upload public picture to the server
+      summary: receive public picture upload link and picture key
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
+              required:
+                - metadata
               properties:
-                picture:
-                  type: string
-                  format: binary
+                metadata:
+                  description: picture metadata
+                  type: object
+                  example: { width: 200, height: 200, fileSize: 9515236, fileExtension: 'jpg' }
       parameters:
         - name: authorization
           in: header
@@ -190,29 +193,19 @@ paths:
             type: string
           example: token
       responses:
-        '201':
-          description: Created
+        '200':
+          description: OK
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  key:
                     type: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 400
-                  message:
+                  uploadUrl:
                     type: string
-        '500':
-          description: Forbidden
+        '401':
+          description: Not Authorized
           content:
             application/json:
               schema:
@@ -220,9 +213,7 @@ paths:
                 properties:
                   status:
                     type: number
-                    example: 500
-                  error:
-                    type: string
+                    example: 401
                   message:
                     type: string
 
@@ -230,7 +221,7 @@ paths:
     put:
       tags:
         - Gallery/upload
-      summary: get private upload link and picture key
+      summary: receive private picture upload link and picture key
       requestBody:
         content:
           application/json:
